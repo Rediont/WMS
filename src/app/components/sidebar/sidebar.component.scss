@@ -1,0 +1,37 @@
+.sidebar{
+    width: 200px;
+    height: 80%;
+    background: linear-gradient(rgb(50, 50, 50), rgb(45, 45, 45));
+    border-radius: 2px;
+}
+
+.sidebar ul{
+    list-style-type: none;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    padding: 0px;
+}
+
+a {
+    text-align: center;
+}
+
+.sidebar a{
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    border-bottom: 2px solid rgb(70, 70, 70);
+    transition: background 0.3s ease;
+    border-radius: 2px;
+}
+
+.sidebar a:hover{
+    background-color: yellow;
+    color: black;
+}

@@ -1,0 +1,11 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+    background: linear-gradient(rgb(70,70,70),rgb(60,60,60)) ; 
+}
