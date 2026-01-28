@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './contracts.component.scss'
 })
 export class ContractsComponent {
-
+  items : string[] = ['Contract A', 'Contract B', 'Contract C'];
 }

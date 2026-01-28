@@ -12,7 +12,14 @@
     gap: 30px;
 }
 
-.Main-buttons-list {
+.main-buttons-container {
+    flex-grow: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;  
+}
+
+.main-buttons-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
     gap: 15px; 
@@ -21,11 +28,12 @@
     margin: 0;
     width: 100%;
 
-    background-color: rgb(50, 50, 50);
+    background-color: rgb(70, 70, 70);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 5px; 
 }
 
-.Main-buttons-list li a, button {
+.main-buttons-list li a, button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,7 +48,7 @@
   transition: background 0.3s ease;
 }
 
-.Main-buttons-list li a:hover , button:hover {
+.main-buttons-list li a:hover , button:hover {
     background-color: yellow;
     color: black;
 }
@@ -51,10 +59,12 @@
 }
 
 .statistics {
-    background-color: rgb(50, 50, 50);
+    flex-grow: 1;
+    background-color: rgb(70, 70, 70);
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 10px;
     border-radius: 5px;
     color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
