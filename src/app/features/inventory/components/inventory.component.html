@@ -11,7 +11,9 @@
         <app-table 
         [columns]="inventoryColumns" 
         [data]="inventoryItems" 
-        (rowClicked)="onItemSelected($event)">
+        [rowIdKey]="rowIdKeyForInventory"
+        (rowClicked)="onItemSelected($event)"
+        (selectionChanged)="onSelectionChange($event)">
     </app-table>
     </div>
 </div>

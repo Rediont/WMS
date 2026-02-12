@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { TableColumn } from '../../shared/table-config.model';
-import { GenericTableComponent } from "../../shared/app-table.component";
+import { TableColumn } from '../../shared/generic.table.component/table-config.model';
+import { GenericTableComponent } from "../../shared/generic.table.component/app-table.component";
 
 @Component({
     selector: 'app-clients',
@@ -9,15 +9,18 @@ import { GenericTableComponent } from "../../shared/app-table.component";
     styleUrl: './clients.component.scss'
 })
 export class ClientsComponent {
-    inventoryColumns: TableColumn[] = [
+    clientColumns: TableColumn[] = [
       { key: 'index', label: '№' },
-      { key: 'id', label: 'Pallet ID' },
+      { key: 'id', label: 'Client ID' },
       { key: 'name', label: 'Name' },
-      { key: 'alley', label: 'Alley Location' },
-      { key: 'type', label: 'Material Type' }
+      { key: 'alley', label: 'Contact Person' },
+      { key: 'type', label: 'Phone Number'},
+      { key: 'email', label: 'Email'}
     ];
 
-    inventoryItems: any[] = [];
+    rowIdKeyForClients = 'id';
+
+    clientItems: any[] = [];
 
     onItemSelected(item: any) {
       console.log('Selected client:', item);

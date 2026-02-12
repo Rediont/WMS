@@ -21,7 +21,6 @@ h2{
 .inventory-list {
   flex-grow: 1;
   height: 400px;
-  overflow-y: auto;
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: gray;
@@ -31,22 +30,6 @@ h2{
 table {
   width: 100%;
   border-collapse: collapse;
-}
-
-/* Фіксована "шапка" таблиці, щоб вона не зникала при скролі */
-thead th {
-  position: sticky;
-  top: 0;
-  background-color: #f8f9fa;
-  z-index: 1;
-  border-bottom: 2px solid #dee2e6;
-  padding: 12px;
-  text-align: left;
-}
-
-td {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
 }
 
 /* Ефект "зебри" для зручності читання */

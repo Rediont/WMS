@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import {MatDividerModule} from "@angular/material/divider";
-import { TableColumn } from "../../../shared/table-config.model";
-import { GenericTableComponent } from '../../../shared/app-table.component';
+import { TableColumn } from "../../../shared/generic.table.component/table-config.model";
+import { GenericTableComponent } from '../../../shared/generic.table.component/app-table.component';
 
 @Component({
     selector: 'app-inventory',
@@ -36,7 +36,23 @@ export class InventoryComponent {
     { key: 'type', label: 'Material Type' }
   ];
 
+  rowIdKeyForInventory = 'id';
+
+  selectedInventoryItems: any[] = [];
+
   onItemSelected(item: any) {
-    console.log('Selected inventory:', item);
+    console.log('Selected inventory item:', item);
+  }
+
+  onSelectionChange(selectedItems: any[]) {
+    console.log('Selected items changed:', selectedItems);
+    this.selectedInventoryItems = selectedItems;
+  }
+
+  deleteSelected() {
+    if (this.selectedInventoryItems.length === 0) return;
+    
+    const idsToDelete = this.selectedInventoryItems.map(i => i.id);
+    console.log('Deleting IDs:', idsToDelete);
   }
 }

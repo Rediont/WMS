@@ -1,14 +1,15 @@
 <div>
-    <h1>Inventory Management</h1>
+    <h2>Client Management</h2>
     <div class="inventory-actions">
-        <button>Add New Item</button>
-        <button>Delete Item</button>
+        <button>Add New Client</button>
+        <button>Delete Client</button>
     </div>
 
-    <div class="inventory-list">
+    <div class="client-list">
         <app-table 
-        [columns]="inventoryColumns" 
-        [data]="inventoryItems" 
+        [columns]="clientColumns" 
+        [data]="clientItems" 
+        [rowIdKey]="rowIdKeyForClients"
         (rowClicked)="onItemSelected($event)">
         </app-table>
     </div>
