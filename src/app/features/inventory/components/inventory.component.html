@@ -1,0 +1,17 @@
+
+<div class="inventory-container">
+    <h2>Inventory Management</h2>
+    <mat-divider></mat-divider>
+    <div class="inventory-actions">
+        <button>Add New Item</button>
+        <button>Delete Item</button>
+    </div>
+
+    <div class="inventory-list">
+        <app-table 
+        [columns]="inventoryColumns" 
+        [data]="inventoryItems" 
+        (rowClicked)="onItemSelected($event)">
+    </app-table>
+    </div>
+</div>
