@@ -1,8 +1,9 @@
-<div>
+<div class="client-container">
     <h2>Client Management</h2>
-    <div class="inventory-actions">
-        <button>Add New Client</button>
-        <button>Delete Client</button>
+    <mat-divider></mat-divider>
+    <div class="client-actions">
+        <button mat-raised-button color="primary" (click)="openAddDialog()">Add New Client</button>
+        <button mat-raised-button color="warn" >Delete Client</button>
     </div>
 
     <div class="client-list">

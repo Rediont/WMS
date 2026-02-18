@@ -1,3 +1,8 @@
+    .table-container {
+        max-height: 400px; /* Встановіть максимальну висоту для контейнера таблиці */
+        overflow-y: auto; /* Додайте вертикальну прокрутку, якщо вміст перевищує висоту */
+    }
+    
     thead th {
         position: sticky;
         top: 0;

@@ -25,14 +25,3 @@ h2{
   border-radius: 4px;
   background-color: gray;
 }
-
-/* Стилізація таблиці */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-/* Ефект "зебри" для зручності читання */
-tbody tr:nth-child(even) {
-  background-color: #fafafa;
-}

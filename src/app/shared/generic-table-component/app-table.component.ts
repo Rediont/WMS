@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableColumn } from './table-config.model';
 
@@ -10,27 +10,26 @@ import { TableColumn } from './table-config.model';
   styleUrls: ['./app-table.component.scss']
 })
 export class GenericTableComponent {
-@Input({ required: true }) data: any[] = [];
+  @Input({ required: true }) data: any[] = [];
   @Input({ required: true }) columns: TableColumn[] = [];
-  
-  // НОВЕ: Ключ, який є унікальним ідентифікатором рядка (наприклад, 'id', 'palletId', 'username')
   @Input({ required: true }) rowIdKey!: string; 
 
-  // Подія при кліку на рядок (залишаємо старе)
   @Output() rowClicked = new EventEmitter<any>();
-
-  // НОВЕ: Подія, що віддає масив вибраних об'єктів
   @Output() selectionChanged = new EventEmitter<any[]>();
 
-  // Внутрішній стан: зберігаємо ID вибраних елементів
   selectedIds = new Set<any>();
 
-  // Скидаємо вибір, якщо вхідні дані змінилися
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data']) {
       this.selectedIds.clear();
       this.emitSelection();
     }
+  }
+
+  private cdr = inject(ChangeDetectorRef);
+
+  refresh() {
+    this.cdr.markForCheck(); 
   }
 
   // --- Логіка вибору ---

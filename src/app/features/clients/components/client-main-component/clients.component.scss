@@ -1,0 +1,27 @@
+
+.client-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%; /* або наприклад 80vh */
+  gap: 20px;
+}
+
+.client-list {
+  flex-grow: 1;
+  height: 400px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: gray;
+}
+
+h2{
+    margin: 0;
+    color: white;
+}
+
+.client-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; 
+}
