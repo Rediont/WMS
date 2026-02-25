@@ -1,0 +1,14 @@
+<div class="map-container">
+  <h3>Warehouse Top-Down Map</h3>
+  
+  <div class="grid">
+    @for (alley of alleys; track alley.id) {
+      <div class="alley-block" 
+           (click)="alleyClicked.emit(alley)"
+           [style.background-color]="getOccupancyColor(alley.occupancy)">
+        <span class="alley-name">{{ alley.name }}</span>
+        <span class="occupancy">{{ alley.occupancy }}% Full</span>
+      </div>
+    }
+  </div>
+</div>

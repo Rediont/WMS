@@ -10,7 +10,7 @@ import { A11yModule } from "@angular/cdk/a11y";
 
 @Component({
     selector: 'app-clients',
-    imports: [GenericTableComponent, MatButton, MatDivider, A11yModule],
+    imports: [GenericTableComponent, MatButton, A11yModule],
     templateUrl: './clients.component.html',
     styleUrl: './clients.component.scss'
 })

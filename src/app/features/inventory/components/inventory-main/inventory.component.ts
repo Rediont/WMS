@@ -1,6 +1,4 @@
 import { Component, inject, ViewChild } from '@angular/core';
-import { RouterLink } from "@angular/router";
-import {MatDividerModule} from "@angular/material/divider";
 import { TableColumn } from "../../../../shared/generic-table-component/table-config.model";
 import { GenericTableComponent } from '../../../../shared/generic-table-component/app-table.component';
 import { MatButton } from '@angular/material/button';
@@ -10,7 +8,7 @@ import { InventoryItem } from '../../models/inventory-item.model';
 
 @Component({
     selector: 'app-inventory',
-    imports: [ MatDividerModule, GenericTableComponent, MatButton],
+    imports: [GenericTableComponent, MatButton],
     templateUrl: './inventory.component.html',
     styleUrl: './inventory.component.scss'
 })

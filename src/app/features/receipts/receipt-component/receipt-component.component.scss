@@ -1,4 +1,4 @@
-.contracts-container {
+.receipts-container {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -11,13 +11,13 @@ h2{
     color: white;
 }
 
-.contracts-actions {
+.receipts-actions {
   display: flex;
   gap: 10px;
   flex-shrink: 0; 
 }
 
-.contracts-list {
+.receipts-list {
   flex-grow: 1;
   height: 400px;
   border: 1px solid #ddd;

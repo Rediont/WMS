@@ -1,0 +1,17 @@
+<div class="receipts-container">
+    <h2>Incoming Receipts</h2>
+    <div class="receipts-actions">
+        <button mat-raised-button color="primary">Add New Receipt</button>
+        <button mat-raised-button color="warn">Delete Receipt</button>
+    </div>
+
+    <div class="receipts-list">
+        <app-table 
+        [columns]="receiptColumns" 
+        [data]="receiptItems" 
+        [rowIdKey]="rowIdKeyForReceipts"
+        (rowClicked)="onItemSelected($event)"
+        (selectionChanged)="onSelectionChange($event)">
+    </app-table>
+    </div>
+</div>

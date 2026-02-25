@@ -19,7 +19,7 @@
     gap: 15px;  
 }
 
-.main-buttons-list {
+.main-buttons-list, .main-action-buttons-list  {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
     gap: 15px; 
@@ -33,7 +33,7 @@
     border-radius: 5px; 
 }
 
-.main-buttons-list li a, button {
+.main-buttons-list li a, .main-action-buttons-list li a, button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,7 +48,7 @@
   transition: background 0.3s ease;
 }
 
-.main-buttons-list li a:hover , button:hover {
+.main-buttons-list li a:hover ,.main-action-buttons-list li a:hover, button:hover {
     background-color: yellow;
     color: black;
 }

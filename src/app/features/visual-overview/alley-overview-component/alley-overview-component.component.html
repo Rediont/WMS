@@ -1,0 +1,32 @@
+<div class="rack-container">
+  <div class="header">
+    <button class="back-btn" (click)="backClicked.emit()">⬅ Back to Map</button>
+    <h3>Rack View: {{ alleyName }}</h3>
+  </div>
+
+  <div class="rack">
+    @for (level of levels; track level) {
+      <div class="rack-level">
+        <div class="level-indicator">L{{ level }}</div>
+        
+        <div class="cells-row">
+          @for (cell of getCellsForLevel(level); track cell.id) {
+            <div class="cell" 
+                 [ngClass]="cell.status"
+                 (click)="cellClicked.emit(cell)">
+              
+              <span class="cell-id">{{ cell.section }}</span>
+              
+              @if (cell.status === 'full') {
+                <div class="pallet-box">{{ cell.palletId }}</div>
+              }
+              @if (cell.status === 'blocked') {
+                <div class="blocked-x">❌</div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
