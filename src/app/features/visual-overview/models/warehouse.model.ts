@@ -1,5 +1,5 @@
 export interface Alley {
-  id: string;
+  id: number;
   name: string;
   occupancy: number; // Заповненість у відсотках (0 - 100)
 }

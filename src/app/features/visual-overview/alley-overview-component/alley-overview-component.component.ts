@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './alley-overview-component.component.html',
   styleUrl: './alley-overview-component.component.scss'
 })
-export class AlleyOverviewComponentComponent {
+export class AlleyOverviewComponent {
   @Input({ required: true }) alleyName: string = '';
   @Input({ required: true }) cells: RackCell[] = [];
   

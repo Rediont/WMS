@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Alley } from '../models/warehouse.model';
+import { WarehouseService } from '../warehouseService';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-overview-component',
@@ -8,8 +11,22 @@ import { Alley } from '../models/warehouse.model';
   styleUrl: './warehouse-map-component.component.scss'
 })
 export class WarehouseMapComponent {
-  @Input({ required: true }) alleys: Alley[] = [];
-  @Output() alleyClicked = new EventEmitter<Alley>();
+  alleys: Alley[] = [];
+  
+  // Інжектимо сервіс, який відповідає за дані складу
+  private warehouseService = inject(WarehouseService);
+  private router = inject(Router);
+
+  ngOnInit() {
+    // Компонент сам завантажує алеї при відкритті сторінки
+    this.alleys = this.warehouseService.getAlleys(); 
+    // або через subscribe(), якщо це запит на сервер:
+    // this.warehouseService.getAlleys().subscribe(data => this.alleys = data);
+  }
+
+  goToAlley(alleyId: number) {
+    this.router.navigate(['/alleys', alleyId]); 
+  }
 
   getOccupancyColor(occupancy: number): string {
     if (occupancy < 30) return '#c8e6c9'; // Світло-зелений

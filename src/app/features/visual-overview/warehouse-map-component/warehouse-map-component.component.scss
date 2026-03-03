@@ -3,20 +3,39 @@
   border: 2px dashed #ccc;
   border-radius: 8px;
   background: #fafafa;
+  height: 500px;
+  
+  /* 1. Додаємо flex, щоб правильно розподілити висоту між заголовком і списком */
+  display: flex;
+  flex-direction: column;
 
   h3 {
     margin-top: 0;
     color: #333;
+    flex-shrink: 0; /* Щоб заголовок не стискався */
   }
 
   .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    /* 2. Використовуємо flex для горизонтального ряду */
+    display: flex;
     gap: 20px;
     margin-top: 20px;
+    padding-bottom: 10px; /* Відступ знизу, щоб скролбар не перекривав контент */
+    
+    /* 3. Забираємо весь залишок висоти контейнера */
+    flex-grow: 1; 
+    
+    /* 4. Вмикаємо горизонтальний скрол */
+    overflow-x: auto;
+    overflow-y: hidden;
 
     .alley-block {
-      height: 250px;
+      /* 5. Задаємо блокам фіксовану ширину (не даємо їм стискатися) */
+      flex: 0 0 150px; /* Змініть 150px на потрібну вам ширину */
+      
+      /* 6. Розтягуємо на всю доступну висоту .grid */
+      height: 100%; 
+      
       border: 2px solid #333;
       border-radius: 4px;
       display: flex;
@@ -29,15 +48,16 @@
       font-weight: bold;
 
       &:hover {
-        transform: translateY(-5px);
+        transform: translateY(-0px);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       }
 
       .alley-name, .occupancy {
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.9);
         padding: 4px 8px;
         border-radius: 4px;
         margin: 5px 0;
+        text-align: center;
       }
 
       .alley-name {
