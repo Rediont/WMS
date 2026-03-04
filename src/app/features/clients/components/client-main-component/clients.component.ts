@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ClientDialogWrapperComponent } from '../client-form/client-dialog-wrapper.component';
 import { MatDivider } from '@angular/material/divider';
 import { A11yModule } from "@angular/cdk/a11y";
+import { ClientService } from '../../client.service';
 
 @Component({
     selector: 'app-clients',
@@ -16,19 +17,31 @@ import { A11yModule } from "@angular/cdk/a11y";
 })
 export class ClientsComponent {
     private dialog = inject(MatDialog);
+    private clientService = inject(ClientService);
 
     clientColumns: TableColumn[] = [
       { key: 'index', label: '№' },
       { key: 'id', label: 'Client ID' },
       { key: 'name', label: 'Name' },
-      { key: 'alley', label: 'Contact Person' },
-      { key: 'type', label: 'Phone Number'},
+      { key: 'contactPersonName', label: 'Contact Person' },
+      { key: 'contactPersonPhone', label: 'Phone Number'},
       { key: 'email', label: 'Email'}
     ];
 
     rowIdKeyForClients = 'id';
 
     clientItems: ClientObject[] = [];
+
+    ngOnInit() {
+      this.clientService.getClients().subscribe({
+        next: (clients) => {
+          this.clientItems = clients;
+        },
+        error: (err) => {
+          console.error('Помилка завантаження клієнтів:', err);
+        }
+      });
+    }
 
     onItemSelected(item: any) {
       console.log('Selected client:', item);
@@ -44,8 +57,12 @@ export class ClientsComponent {
     dialogRef.afterClosed().subscribe((result: ClientObject | null) => {
       if (result) {
         console.log('Creating new client:', result);
-        // Тут логіка додавання (id генеруємо для прикладу)
-        this.clientItems.push({...result});
+        this.clientService.addClient(result).subscribe({
+          next: (createdClient) => {
+            this.clientItems.push(createdClient);
+            console.log('Client created successfully:', createdClient);
+          }
+        });
       }
     });
   }

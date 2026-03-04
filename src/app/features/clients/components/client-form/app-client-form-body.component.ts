@@ -18,52 +18,8 @@ import { ClientObject } from '../../models/client.model';
     MatSelectModule,
     MatButtonModule
   ],
-  template: `
-    <form [formGroup]="form" class="form-container">
-
-      <h2>{{ isEditMode ? 'Edit Item' : 'Create New Item' }}</h2>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Client ID</mat-label>
-        <input matInput type="number" formControlName="id">
-        <mat-error *ngIf="form.get('id')?.hasError('required')">Required</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Client Name</mat-label>
-        <input matInput formControlName="name">
-        <mat-error *ngIf="form.get('name')?.hasError('required')">Required</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email">
-        <mat-error *ngIf="form.get('email')?.hasError('required')">Required</mat-error>
-        <mat-error *ngIf="form.get('email')?.hasError('email')">Invalid email</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Phone Number</mat-label>
-        <input matInput formControlName="phone">
-        <mat-error *ngIf="form.get('phone')?.hasError('required')">Required</mat-error>
-      </mat-form-field>
-
-        <div class="actions">
-            <button mat-button type="button" (click)="cancel.emit()">Cancel</button>
-
-        <button mat-raised-button color="primary"
-                [disabled]="form.invalid || form.pristine"
-                (click)="submit()">
-          {{ isEditMode ? 'Save Changes' : 'Create' }}
-        </button>
-    </div>
-
-    </form>
-  `,
-  styles: [`
-    .form-container { display: flex; flex-direction: column; gap: 15px; }
-    .actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
-  `]
+  templateUrl: './app-client-form-body.component.html',
+  styleUrls: ['./app-client-form-body.component.scss'],
 })
 export class ClientFormBodyComponent implements OnChanges {
   private fb = inject(FormBuilder);
@@ -75,11 +31,12 @@ export class ClientFormBodyComponent implements OnChanges {
   @Output() save = new EventEmitter<ClientObject>();
   @Output() cancel = new EventEmitter<void>();
 
-  form: FormGroup = this.fb.group({
-    id: [null],   
+  form: FormGroup = this.fb.group({  
     name: ['', [Validators.required]],
+    EDRPO: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required]]    
+    contactPersonName: ['', [Validators.required]],
+    contactPersonPhone: ['', [Validators.required]]    
   });
 
   // Гетер для визначення режиму
@@ -94,9 +51,14 @@ export class ClientFormBodyComponent implements OnChanges {
     }
   }
 
-  submit() {
+submit() {
     if (this.form.valid) {
-      this.save.emit(this.form.value);
+      const payload = {
+        ...this.form.value,
+        EDRPO: String(this.form.value.EDRPO)
+      };
+
+      this.save.emit(payload);
     }
   }
 }
