@@ -1,9 +1,35 @@
+
+.shipments-page-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: calc(80vh - 40px); /* 100% висоти вікна мінус невеликий відступ */
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 .shipments-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  height: 100%; /* або наприклад 80vh */
-  gap: 20px;
+  flex-grow: 1; /* Займає всю вільну ширину */
+  min-width: 0; /* Щоб таблиця не ламала сітку */
+  height: 100%;
+  gap: 16px;
+}
+
+.shipments-sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  height: 100%;
+  
+  /* Стиль вашої темної теми */
+  background-color: #2c2c2c; /* Трохи світліший за чорний фон сторінки */
+  border: 1px solid #444;    /* Темна рамка */
+  border-radius: 8px;
+  
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 h2{
@@ -23,4 +49,8 @@ h2{
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: gray;
+}
+
+app-generic-filter {
+  height: 100%;
 }

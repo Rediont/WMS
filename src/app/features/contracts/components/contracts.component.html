@@ -1,16 +1,29 @@
-<div class="contracts-container">
-    <h2>Contracts Management</h2>
-    <div class="contracts-actions">
-        <button mat-raised-button color="primary">Add New Item</button>
-        <button mat-raised-button color="warn">Delete Item</button>
+<div class="contracts-page-wrapper">
+
+    <aside class="contracts-sidebar">
+        <app-generic-filter 
+            [fields]="contractFilterConfig" 
+            (filterChanged)="applyFilter($event)">
+        </app-generic-filter>
+    </aside>
+
+    <div class="contracts-container">
+        <h2>Contracts Management</h2>
+        
+        <div class="contracts-actions">
+            <button mat-raised-button color="primary">Add New Item</button>
+            <button mat-raised-button color="warn">Delete Item</button>
+        </div>
+        
+        <div class="contracts-list">
+            <app-table 
+                [columns]="contractColumns" 
+                [data]="contractItems" 
+                [rowIdKey]="rowIdKeyForContracts"
+                (rowClicked)="onItemSelected($event)"
+                (selectionChanged)="onSelectionChange($event)">
+            </app-table>
+        </div>
     </div>
-    <div class="contracts-list">
-        <app-table 
-        [columns]="contractColumns" 
-        [data]="contractItems" 
-        [rowIdKey]="rowIdKeyForContracts"
-        (rowClicked)="onItemSelected($event)"
-        (selectionChanged)="onSelectionChange($event)">
-        </app-table>
-    </div>
+
 </div>

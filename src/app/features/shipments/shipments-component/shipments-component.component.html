@@ -1,17 +1,28 @@
-<div class="shipments-container">
-    <h2>Outgoing Shipments</h2>
-    <div class="shipments-actions">
-        <button mat-raised-button color="primary">Add New Shipment</button>
-        <button mat-raised-button color="warn">Delete Shipment</button>
+
+<div class="shipments-page-wrapper">
+
+    <div class="shipments-sidebar">
+        <app-generic-filter 
+            [fields]="shipmentFilterConfig" 
+            (filterChanged)="applyFilter($event)">
+        </app-generic-filter>
     </div>
 
-    <div class="shipments-list">
-        <app-table 
-        [columns]="shipmentColumns" 
-        [data]="shipmentItems" 
-        [rowIdKey]="rowIdKeyForShipments"
-        (rowClicked)="onItemSelected($event)"
-        (selectionChanged)="onSelectionChange($event)">
-    </app-table>
+    <div class="shipments-container">
+        <h2>Outgoing Shipments</h2>
+        <div class="shipments-actions">
+            <button mat-raised-button color="primary">Add New Shipment</button>
+            <button mat-raised-button color="warn">Delete Shipment</button>
+        </div>
+
+        <div class="shipments-list">
+            <app-table 
+            [columns]="shipmentColumns" 
+            [data]="shipmentItems" 
+            [rowIdKey]="rowIdKeyForShipments"
+            (rowClicked)="onItemSelected($event)"
+            (selectionChanged)="onSelectionChange($event)">
+        </app-table>
+        </div>
     </div>
 </div>

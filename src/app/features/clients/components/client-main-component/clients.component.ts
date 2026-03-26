@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { TableColumn } from '../../../../shared/generic-table-component/table-config.model';
-import { GenericTableComponent } from "../../../../shared/generic-table-component/app-table.component";
+import { TableColumn } from '../../../../shared/generic-table/table-config.model';
+import { GenericTableComponent } from "../../../../shared/generic-table/app-table.component";
 import { ClientObject } from '../../models/client.model';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';

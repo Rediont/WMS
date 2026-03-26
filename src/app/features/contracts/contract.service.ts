@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ContractObject } from './models/contract.model'; // Ваш шлях до моделі
 import { environment } from '../../../environments/environment';
@@ -15,9 +15,28 @@ export class ContractService {
 
   constructor() { }
 
-  getContracts(): Observable<ContractObject[]> {
-    return this.http.get<ContractObject[]>(`${this.apiUrl}/all`);
+  getContracts(filters?: any): Observable<any[]> {
+    let params = new HttpParams();
+
+    if (filters) {
+      // 1. Звичайні параметри (клієнт, статус)
+      if (filters.clientId) params = params.append('clientId', filters.clientId);
+      if (filters.status) params = params.append('status', filters.status);
+      
+      // 2. Параметри для проміжку часу (дата контракту від - до)
+      if (filters.contractDateRange) {
+        if (filters.contractDateRange.start) {
+          params = params.append('dateFrom', filters.contractDateRange.start.toISOString());
+        }
+        if (filters.contractDateRange.end) {
+          params = params.append('dateTo', filters.contractDateRange.end.toISOString());
+        }
+      }
+    }
+
+    return this.http.get<any[]>(`${this.apiUrl}/all`, { params });
   }
+
 
   getContractById(id: number): Observable<ContractObject> {
     return this.http.get<ContractObject>(`${this.apiUrl}/${id}`);

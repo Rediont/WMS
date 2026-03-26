@@ -1,0 +1,46 @@
+<form [formGroup]="filterForm" class="filter-wrapper">
+  
+  @for (field of fields; track field.key) {
+    
+    @if (field.type === 'text' || field.type === 'number') {
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput [type]="field.type" [formControlName]="field.key">
+      </mat-form-field>
+    }
+
+    @if (field.type === 'select') {
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>{{ field.label }}</mat-label>
+        <mat-select [formControlName]="field.key">
+          <mat-option [value]="null">All</mat-option>
+          @for (opt of field.options; track opt.value) {
+            <mat-option [value]="opt.value">{{ opt.display }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    @if (field.type === 'date-range') {
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>{{ field.label }}</mat-label>
+        <mat-date-range-input [rangePicker]="rangePicker" [formGroup]="getAsFormGroup(field.key)">
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="rangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #rangePicker></mat-date-range-picker>
+      </mat-form-field>
+    }
+
+  }
+
+  <div class="filter-actions">
+    <button mat-raised-button color="primary" type="button" (click)="applyFilters()">
+      Apply Filters
+    </button>
+    <button mat-raised-button color="warn" type="button" (click)="resetFilters()">
+      Reset All
+    </button>
+  </div>
+</form>

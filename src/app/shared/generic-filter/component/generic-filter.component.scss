@@ -1,0 +1,35 @@
+.filter-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 16px;
+  
+  background-color: #f5f5f5; /* Світло-сірий фон. Якщо хочеш чисто білий - напиши #ffffff */
+  padding: 20px; /* Внутрішні відступи, щоб контент "дихав" */
+  border-radius: 8px; /* Злегка округлі кути контейнера */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Легка тінь, щоб відірвати фільтр від фону сторінки */
+  box-sizing: border-box; /* Щоб padding не збільшував загальну ширину блоку */
+}
+
+.filter-field {
+  width: 100%;
+  /* background-color: #ffffff;  <-- ПРИБРАТИ! Це ламає outline дизайн Angular Material */
+}
+
+/* Якщо тобі КРИТИЧНО потрібен білий фон всередині інпута, роби це через ng-deep: */
+::ng-deep .filter-field .mdc-text-field--outlined {
+  background-color: #ffffff;
+}
+
+.filter-actions {
+  margin-top: auto; 
+  display: flex;
+  flex-direction: column; 
+  gap: 10px;
+
+  button {
+    width: 100%;
+    padding: 24px 0; 
+    font-size: 1rem;
+  }
+}
