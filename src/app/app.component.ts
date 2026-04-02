@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./core/layout/header/header.component";
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { CommonModule } from '@angular/common';
@@ -13,4 +13,6 @@ import { SidebarComponent } from "./core/layout/sidebar/sidebar.component";
 })
 export class AppComponent {
   title = 'WMS';
+
+  public router = inject(Router);
 }

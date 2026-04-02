@@ -39,7 +39,7 @@ export class InventoryComponent {
     { key: 'id', label: 'Pallet ID' },
     { key: 'name', label: 'Name' },
     { key: 'alley', label: 'Alley Location' },
-    { key: 'type', label: 'Material Type' }
+    { key: 'type', label: 'Pallet Type' }
   ];
 
   rowIdKeyForInventory = 'id';

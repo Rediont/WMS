@@ -1,0 +1,42 @@
+.login-wrapper {
+  /* Займає всю висоту вікна */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* Твій фон */
+  background: linear-gradient(rgb(70,70,70), rgb(60,60,60));
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px 20px 20px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  /* Легка тінь для глибини */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+mat-card-title {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.login-btn {
+  margin-top: 10px;
+  padding: 24px 0; /* Робимо кнопку трохи вищою і зручнішою */
+  font-size: 16px;
+}

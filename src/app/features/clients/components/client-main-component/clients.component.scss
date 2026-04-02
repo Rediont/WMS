@@ -25,3 +25,9 @@ h2{
   gap: 10px;
   flex-shrink: 0; 
 }
+
+.client-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

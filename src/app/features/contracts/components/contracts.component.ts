@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { GenericTableComponent } from '../../../shared/generic-table/app-table.component';
 import { TableColumn } from '../../../shared/generic-table/table-config.model';
 import { MatButton } from "@angular/material/button";
@@ -7,6 +7,8 @@ import { ContractObject } from '../models/contract.model';
 import { ContractService } from '../contract.service';
 import { FilterField } from '../../../shared/generic-filter/model/generic-filter.model';
 import { GenericFilterComponent } from '../../../shared/generic-filter/component/generic-filter.component';
+import { AppStateService } from '../../../core/state.service/state.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-contracts',
@@ -17,6 +19,11 @@ import { GenericFilterComponent } from '../../../shared/generic-filter/component
 export class ContractsComponent {
 
   private contractService = inject(ContractService);
+  private appState = inject(AppStateService);
+  private route = inject(ActivatedRoute); // ДОДАНО: для читання URL
+
+  // Отримуємо доступ до компонента фільтра, щоб програмно викликати apply()
+  @ViewChild(GenericFilterComponent) filterComponent!: GenericFilterComponent;
 
   contractColumns: TableColumn[] = [
     { key: 'index', label: '№' },
@@ -31,11 +38,7 @@ export class ContractsComponent {
       key: 'clientId', 
       label: 'Client', 
       type: 'select', 
-      options: [
-        // Поки що заглушки, пізніше заповнимо їх реальними даними з БД
-        { value: 1, display: 'Client A' },
-        { value: 2, display: 'Client B' }
-      ] 
+      options: [] 
     },
     { 
       // Змінено ключ та тип для фільтрації по проміжку часу (З - По)
@@ -63,7 +66,31 @@ export class ContractsComponent {
 
   rowIdKeyForContracts = 'id';
 
-  ngOnInit() {
+ngOnInit() {
+    this.populateClientFilter();
+
+    // Замість простого завантаження всіх контрактів, ми підписуємося на URL параметри
+    this.route.queryParams.subscribe(params => {
+      
+      // Перевіряємо, чи є параметр 'clients' (наприклад, ?clients=5)
+      if (params['clients']) {
+        // Беремо ID першого клієнта з URL (оскільки у нас звичайний select)
+        const clientIdFromUrl = Number(params['clients'].split(',')[0]);
+
+        // Чекаємо мікросекунду, щоб ViewChild (компонент фільтра) встиг ініціалізуватися
+        setTimeout(() => {
+          this.setInitialFilters(clientIdFromUrl);
+        });
+
+      } else {
+        // Якщо параметрів немає, просто вантажимо всі контракти
+        this.loadAllContracts();
+      }
+    });
+  }
+
+  // Виніс завантаження контрактів в окремий метод для зручності
+  private loadAllContracts() {
     this.contractService.getContracts().subscribe({
       next: (contracts) => {
         this.contractItems = contracts;
@@ -72,6 +99,36 @@ export class ContractsComponent {
         console.error('Error loading contracts:', err);
       }
     });
+  }
+
+  private populateClientFilter() {
+    // Перетворюємо масив клієнтів з бекенду у формат { value, display }, який розуміє наш фільтр
+    const clientOptions = this.appState.lookups.clients.map(client => ({
+      value: client.id,
+      display: client.name
+    }));
+
+    // Оновлюємо конфігурацію фільтра (важливо робити це через .map(), щоб Angular помітив зміни)
+    this.contractFilterConfig = this.contractFilterConfig.map(field => {
+      if (field.key === 'clientId') {
+        return { ...field, options: clientOptions };
+      }
+      return field;
+    });
+  }
+
+  private setInitialFilters(clientId: number) {
+    if (this.filterComponent && this.filterComponent.filterForm) {
+      const clientControl = this.filterComponent.filterForm.get('clientId');
+      
+      if (clientControl) {
+        // Встановлюємо значення у випадаючий список
+        clientControl.setValue(clientId);
+        
+        // Автоматично натискаємо "Apply" (це викличе метод applyFilter нижче)
+        this.filterComponent.applyFilters();
+      }
+    }
   }
 
   applyFilter(filterValues: any) {

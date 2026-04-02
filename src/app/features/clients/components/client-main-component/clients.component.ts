@@ -8,6 +8,7 @@ import { ClientDialogWrapperComponent } from '../client-form/client-dialog-wrapp
 import { MatDivider } from '@angular/material/divider';
 import { A11yModule } from "@angular/cdk/a11y";
 import { ClientService } from '../../client.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-clients',
@@ -16,36 +17,61 @@ import { ClientService } from '../../client.service';
     styleUrl: './clients.component.scss'
 })
 export class ClientsComponent {
-    private dialog = inject(MatDialog);
-    private clientService = inject(ClientService);
+  private dialog = inject(MatDialog);
+  private clientService = inject(ClientService);
+  private router = inject(Router);
 
-    clientColumns: TableColumn[] = [
-      { key: 'index', label: '№' },
-      { key: 'id', label: 'Client ID' },
-      { key: 'name', label: 'Name' },
-      { key: 'contactPersonName', label: 'Contact Person' },
-      { key: 'contactPersonPhone', label: 'Phone Number'},
-      { key: 'email', label: 'Email'}
-    ];
+  selectedClientIds: number[] = [];
 
-    rowIdKeyForClients = 'id';
+  clientColumns: TableColumn[] = [
+    { key: 'index', label: '№' },
+    { key: 'id', label: 'Client ID' },
+    { key: 'name', label: 'Name' },
+    { key: 'contactPersonName', label: 'Contact Person' },
+    { key: 'contactPersonPhone', label: 'Phone Number'},
+    { key: 'email', label: 'Email'}
+  ];
 
-    clientItems: ClientObject[] = [];
+  rowIdKeyForClients = 'id';
 
-    ngOnInit() {
-      this.clientService.getClients().subscribe({
-        next: (clients) => {
-          this.clientItems = clients;
-        },
-        error: (err) => {
-          console.error('Помилка завантаження клієнтів:', err);
-        }
-      });
+  clientItems: ClientObject[] = [];
+
+  ngOnInit() {
+    this.clientService.getClients().subscribe({
+      next: (clients) => {
+        this.clientItems = clients;
+      },
+      error: (err) => {
+        console.error('Помилка завантаження клієнтів:', err);
+      }
+    });
+  }
+
+  onItemSelected(item: any) {
+    console.log('Selected client:', item);
+  }
+
+  onSelectionChange(selectedItems: any[]) {
+    console.log('Вибрані клієнти (повні об\'єкти):', selectedItems);
+    
+    this.selectedClientIds = selectedItems.map(item => item.id);
+    
+    console.log('Записані ID для фільтра:', this.selectedClientIds);
+  }
+
+  goToContracts() {
+    // Якщо ніхто не вибраний, просто переходимо
+    if (this.selectedClientIds.length === 0) {
+      this.router.navigate(['/contracts']);
+      return;
     }
 
-    onItemSelected(item: any) {
-      console.log('Selected client:', item);
-    }
+    // Передаємо масив ID як кому-розділений рядок (query param)
+    this.router.navigate(['/contracts'], { 
+      queryParams: { clients: this.selectedClientIds.join(',') } 
+    });
+    // URL буде виглядати так: /contracts?clients=1,5,12
+  }
 
     openAddDialog() {
       const dialogRef = this.dialog.open(ClientDialogWrapperComponent, {

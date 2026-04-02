@@ -1,8 +1,12 @@
 <div class="client-container">
     <h2>Client Management</h2>
-    <div class="client-actions">
-        <button mat-raised-button color="primary" (click)="openAddDialog()">Add New Client</button>
-        <button mat-raised-button color="warn" >Delete Client</button>
+    <div class="client-buttons">
+        <div class="client-actions">
+            <button mat-raised-button color="primary" (click)="openAddDialog()">Add New Client</button>
+            <button mat-raised-button color="warn" >Delete Client</button>
+        </div>
+
+        <button mat-raised-button color="accent" (click)="goToContracts()">Go to Contracts</button>
     </div>
 
     <div class="client-list">
@@ -10,7 +14,7 @@
         [columns]="clientColumns" 
         [data]="clientItems" 
         [rowIdKey]="rowIdKeyForClients"
-        (rowClicked)="onItemSelected($event)">
-        </app-table>
+        (rowClicked)="onItemSelected($event)"
+        (selectionChanged)="onSelectionChange($event)"></app-table>
     </div>
 </div>
