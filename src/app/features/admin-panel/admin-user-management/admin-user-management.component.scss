@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 200px;
+}
+
+.user-management-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding-bottom: 10px;
+}
+
+.user-management-list {
+  height: 280px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: gray;
+}

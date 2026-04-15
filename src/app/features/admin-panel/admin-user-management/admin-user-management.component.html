@@ -1,0 +1,14 @@
+<div>
+    <h2>Admin User Management</h2>
+    <p>Manage users and their permissions here.</p>
+</div>
+<div class="container">
+    <div class="user-management-buttons">
+        <button mat-raised-button color="primary">Add User</button>
+        <button mat-raised-button color="accent">Edit User</button>
+        <button mat-raised-button color="warn">Delete User</button>
+    </div>
+    <div class="user-management-list">
+        <app-table [data]="users" [columns]="userManagementColumns" [rowIdKey]="rowIdKeyForUsers"></app-table>
+    </div>
+</div>

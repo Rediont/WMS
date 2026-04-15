@@ -1,0 +1,52 @@
+
+header {
+    color: yellow;
+    padding: 10px;
+    background: rgb(35, 35, 35);
+    flex-grow: 1;
+}
+
+nav {
+    background: linear-gradient(rgb(50, 50, 50), rgb(45, 45, 45));
+    color: yellow;
+    padding: 5px;
+    height: 78vh;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    display: block;
+}
+
+.admin-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    height: 80%;
+    background-color: #f0f0f0;
+    padding: 20px;
+    background: linear-gradient(rgb(70,70,70),rgb(60,60,60)) ; 
+}
+
+.admin-content {
+    flex-grow: 10;
+    display: flex;
+    max-height: 74vh;
+    flex-direction: column;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background: linear-gradient(rgb(50, 50, 50), rgb(45, 45, 45));
+}
+
+.router {
+    flex-grow: 1;
+}

@@ -3,13 +3,15 @@ import { provideRouter, withDebugTracing } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AppStateService } from './core/state.service/state.service';
 import { of } from 'rxjs';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   // providers: [provideRouter(routes, withDebugTracing())]
-  providers: [provideRouter(routes), provideAnimationsAsync(), provideHttpClient(),
+  providers: [provideRouter(routes), provideAnimationsAsync(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideAppInitializer(() => {
       const appState = inject(AppStateService);
       

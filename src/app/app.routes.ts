@@ -1,4 +1,8 @@
 import { Router, Routes } from '@angular/router';
+import { inject } from '@angular/core';
+
+// --- Імпорти сторінок ---
+import { LoginComponent } from './features/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { ClientsComponent } from './features/clients/components/client-main-component/clients.component';
 import { InventoryComponent } from './features/inventory/components/inventory-main/inventory.component';
@@ -7,31 +11,65 @@ import { ReceiptComponent} from './features/receipts/receipt-component/receipt-c
 import { ShipmentsComponent } from './features/shipments/shipments-component/shipments-component.component';
 import { WarehouseMapComponent } from './features/visual-overview/warehouse-map-component/warehouse-map-component.component';
 import { AlleyOverviewComponent } from './features/visual-overview/alley-overview-component/alley-overview-component.component';
-import { inject } from '@angular/core';
-import { LoginComponent } from './features/login/login.component';
+
+// --- Імпорти ОБОЛОНОК (Тобі потрібно буде їх створити) ---
+import { MainLayoutComponent } from './core/layout/main-layout/main-layout.component';
+import { AdminLayoutComponent } from './core/layout/admin-layout/admin-layout.component';
+import { AdminUserManagementComponent } from './features/admin-panel/admin-user-management/admin-user-management.component';
+import { WarehouseSettingsComponent } from './features/admin-panel/warehouse-settings/warehouse-settings.component';
+import { adminGuard } from './core/interceptors/admin-guard.interceptor';
 
 export const authGuard = () => {
   const router = inject(Router);
   const token = localStorage.getItem('token');
   
   if (token) {
-    return true; // Токен є, пропускаємо користувача на сторінку
+    return true; 
   }
   
-  // Токена немає, примусово перекидаємо на сторінку логіну
   return router.parseUrl('/login'); 
 };
 
 export const routes: Routes = [
-    {path: 'login', component: LoginComponent},
-    {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
-    {path: 'dashboard', component: DashboardComponent, canActivate: [authGuard]},
-    {path: 'contracts', component: ContractsComponent, canActivate: [authGuard]},
-    {path: 'receipts', component: ReceiptComponent, canActivate: [authGuard]},
-    {path: 'shipments', component: ShipmentsComponent, canActivate: [authGuard]},
-    {path: 'clients', component: ClientsComponent, canActivate: [authGuard]},
-    {path: 'inventory', component: InventoryComponent, canActivate: [authGuard]},
-    {path: 'history', component: DashboardComponent, canActivate: [authGuard]},
-    {path: 'visual-overview', component: WarehouseMapComponent, canActivate: [authGuard]},
-    {path: 'alleys/:id', component: AlleyOverviewComponent, canActivate: [authGuard]}
+  // 1. ВІДКРИТА СТОРІНКА (Без хедера і сайдбара)
+  { 
+    path: 'login', 
+    component: LoginComponent 
+  },
+
+  // 2. ОСНОВНА ОБОЛОНКА (Для працівників)
+  {
+    path: '',
+    component: MainLayoutComponent, // Містить звичайний сайдбар і хедер
+    canActivate: [authGuard],       // Захищає ВСІ маршрути всередині children
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'contracts', component: ContractsComponent },
+      { path: 'receipts', component: ReceiptComponent },
+      { path: 'shipments', component: ShipmentsComponent },
+      { path: 'inventory', component: InventoryComponent },
+      { path: 'history', component: DashboardComponent },
+      { path: 'visual-overview', component: WarehouseMapComponent },
+      { path: 'alleys/:id', component: AlleyOverviewComponent }
+    ]
+  },
+
+  // 3. АДМІНСЬКА ОБОЛОНКА (Окрема робоча зона)
+  {
+    path: 'admin',
+    component: AdminLayoutComponent, // Містить адмінський сайдбар/меню
+    canActivate: [authGuard, adminGuard],        // Сюди потім можна додати adminGuard
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'users', component: AdminUserManagementComponent },
+      { path: 'warehouse-settings', component: WarehouseSettingsComponent }
+    ]
+  },
+
+  // 4. ПЕРЕНАПРАВЛЕННЯ (Якщо ввели неіснуючий URL)
+  { 
+    path: '**', 
+    redirectTo: '/dashboard' 
+  }
 ];

@@ -1,15 +1,1 @@
-@if (router.url !== '/login') {
-  
-  <app-header></app-header> 
-  <div class="container">
-    <app-sidebar></app-sidebar>
-    <div class="main-content">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-
-} @else {
-  
   <router-outlet></router-outlet>
-
-}
