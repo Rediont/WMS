@@ -1,31 +1,23 @@
-<div class="rack-container">
+<div class="alley-container">
   <div class="header">
     <button class="back-btn" (click)="backClicked.emit()">⬅ Back to Map</button>
-    <h3>Rack View: {{ alleyName }}</h3>
+    <h3>Alley View: {{ alleyName }}</h3>
   </div>
 
-  <div class="rack">
-    @for (level of levels; track level) {
-      <div class="rack-level">
-        <div class="level-indicator">L{{ level }}</div>
-        
-        <div class="cells-row">
-          @for (cell of getCellsForLevel(level); track cell.id) {
-            <div class="cell" 
-                 [ngClass]="cell.status"
-                 (click)="cellClicked.emit(cell)">
-              
-              <span class="cell-id">{{ cell.section }}</span>
-              
-              @if (cell.status === 'full') {
-                <div class="pallet-box">{{ cell.palletId }}</div>
-              }
-              @if (cell.status === 'blocked') {
-                <div class="blocked-x">❌</div>
-              }
-            </div>
-          }
-        </div>
+  <div class="alley">
+    @for (floor of floors; track floor.index) {
+      <div class="floor-row">
+        @for (cell of floor.cells; track cell.index) {
+          
+          <div class="cell-box" 
+              [class.highlight-green]="isSpotAvailable(floor.index, cell.index)"
+              (click)="selectSpot(floor.index, cell.index)">
+            
+            Комірка {{ cell.index }}
+            
+          </div>
+          
+        }
       </div>
     }
   </div>

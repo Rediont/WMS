@@ -1,105 +1,61 @@
-.rack-container {
-  padding: 20px;
 
-  .header {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-bottom: 20px;
 
-    .back-btn {
-      padding: 8px 16px;
-      cursor: pointer;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background: white;
-      &:hover { background: #f0f0f0; }
-    }
-    
-    h3 { margin: 0; }
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+
+  .back-btn {
+    padding: 8px 16px;
+    cursor: pointer;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    &:hover { background: #e2e8f0; }
   }
+}
 
-  .rack {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background: #e0e0e0;
-    padding: 20px;
-    border-radius: 8px;
-    border-bottom: 8px solid #757575;
+.alley {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Відстань між поверхами */
+  background: #1e293b; /* Темний фон стелажа */
+  padding: 16px;
+  border-radius: 8px;
+}
 
-    .rack-level {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-bottom: 4px solid #9e9e9e;
-      padding-bottom: 10px;
+.floor-row {
+  display: flex;
+  gap: 8px; /* Відстань між комірками на поверсі */
+}
 
-      .level-indicator {
-        font-weight: bold;
-        width: 30px;
-        color: #555;
-      }
+.cell-box {
+  flex: 1;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #334155; /* Колір зайнятої/недоступної комірки */
+  color: #94a3b8;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  cursor: not-allowed; /* Забороняємо клікати на зайняті */
 
-      .cells-row {
-        display: flex;
-        gap: 10px;
-        flex: 1;
+  // МАГІЯ: Клас, який додає Angular, якщо isSpotAvailable() === true
+  &.highlight-green {
+    background-color: #22c55e; /* Яскраво зелений */
+    color: white;
+    border-color: #16a34a;
+    cursor: pointer; /* Дозволяємо клікати */
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
 
-        .cell {
-          flex: 1;
-          height: 80px;
-          border: 2px solid #bdbdbd;
-          border-radius: 4px;
-          position: relative;
-          display: flex;
-          align-items: flex-end;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.2s;
-          background: white;
-
-          &:hover {
-            border-color: #2196f3;
-            box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
-          }
-
-          .cell-id {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            font-size: 0.8em;
-            color: #999;
-          }
-
-          /* Статуси комірок */
-          &.empty { background: #f5f5f5; }
-          &.full { background: #e3f2fd; }
-          &.blocked { 
-            background: #ffebee; 
-            cursor: not-allowed; 
-          }
-
-          .pallet-box {
-            width: 80%;
-            height: 60%;
-            background: #8d6e63;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8em;
-            border-radius: 2px;
-            border: 1px solid #5d4037;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-          }
-
-          .blocked-x {
-            font-size: 1.5em;
-            align-self: center;
-          }
-        }
-      }
+    &:hover {
+      background-color: #16a34a;
+      transform: scale(1.02);
     }
   }
 }

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { GlobalLookup } from './lookup.model';
 import { environment } from '../../../environments/environment.development'; // Твій шлях до API
+import { WarehouseSettingsLookup } from './lookup.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,14 @@ export class AppStateService {
   public lookups: GlobalLookup = {
     clients: [],
     contracts: [],
-    palletTypes: []
+    palletTypes: [],
+    warehouseSettings: { 
+      numberOfAlleys: 0,
+      numberOfAlleyFloors: 0, 
+      numberOfCellsInAlley: 0, 
+      numberOfCellsInAlleyFloor: 0, 
+      numberOfCells: 0 
+    },
   };
 
   // Метод, який піде на бекенд
@@ -30,7 +38,4 @@ export class AppStateService {
       })
     );
   }
-
-
-
 }
