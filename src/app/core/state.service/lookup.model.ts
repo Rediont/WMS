@@ -1,8 +1,17 @@
 // lookup.model.ts
 export interface LookupItem {
   id: number;
-  name: string; // Або title/description, залежно від того, як ти назвав у C#
+  name: string; 
 }
+
+export interface ContractLookupItem {
+  id: number;
+  contractName: string;
+  clientId: number;
+  clientName: string;
+  status: number; 
+}
+
 
 export interface WarehouseSettingsLookup {
   numberOfAlleys: number;
@@ -14,7 +23,8 @@ export interface WarehouseSettingsLookup {
 
 export interface GlobalLookup {
   clients: LookupItem[];
-  contracts: LookupItem[];
+  contracts: ContractLookupItem[];
   palletTypes: LookupItem[];
   warehouseSettings: WarehouseSettingsLookup;
+  documentTypes: LookupItem[];
 }

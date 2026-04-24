@@ -24,6 +24,7 @@ export class AppStateService {
       numberOfCellsInAlleyFloor: 0, 
       numberOfCells: 0 
     },
+    documentTypes: []
   };
 
   // Метод, який піде на бекенд

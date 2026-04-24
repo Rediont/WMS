@@ -8,11 +8,11 @@
     </aside>
 
     <div class="contracts-container">
-        <h2>Contracts Management</h2>
+        <h2>Управління контрактами</h2>
         
         <div class="contracts-actions">
-            <button mat-raised-button color="primary">Add New Item</button>
-            <button mat-raised-button color="warn">Delete Item</button>
+            <button mat-raised-button color="primary" (click)="openAddContractDialog()">Додати новий контракт</button>
+            <button mat-raised-button color="warn">Видалити контракт</button>
         </div>
         
         <div class="contracts-list">
@@ -23,6 +23,12 @@
                 (rowClicked)="onItemSelected($event)"
                 (selectionChanged)="onSelectionChange($event)">
             </app-table>
+        </div>
+
+        <div class="page-buttons">
+            <button mat-button (click)="goToPreviousPage()" [disabled]="currentPage === 0">Попередня</button>
+            <span>Сторінка {{ currentPage + 1 }}</span>
+            <button mat-button (click)="goToNextPage()" [disabled]="currentPage === totalPages - 1">Наступна</button>
         </div>
     </div>
 

@@ -1,6 +1,13 @@
 export interface ContractObject {
-    id: number;
+    contractId: number;
+    contractName: string;
+    clientId: number;
+    clientName: string;
+    statusDisplay: string;
+}
+
+export interface ApiContractObject {
     name: string;
     clientId: number;
-    status: string;
+    currentStatus: number; 
 }

@@ -4,11 +4,12 @@ import { GenericTableComponent } from "../../../../shared/generic-table/app-tabl
 import { ClientObject } from '../../models/client.model';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { ClientDialogWrapperComponent } from '../client-form/client-dialog-wrapper.component';
-import { MatDivider } from '@angular/material/divider';
 import { A11yModule } from "@angular/cdk/a11y";
 import { ClientService } from '../../client.service';
 import { Router } from '@angular/router';
+import { FormConfig } from '../../../../shared/dynamic-form/models/dynamic-form.model';
+import { Validators } from '@angular/forms';
+import { DynamicFormDialogComponent } from '../../../../shared/dynamic-form/dynamic-form-component/dynamic-form-dialog.component';
 
 @Component({
     selector: 'app-clients',
@@ -20,6 +21,10 @@ export class ClientsComponent {
   private dialog = inject(MatDialog);
   private clientService = inject(ClientService);
   private router = inject(Router);
+
+  currentPage : number = 0;
+  totalPages : number = 0;
+
 
   selectedClientIds: number[] = [];
 
@@ -35,6 +40,44 @@ export class ClientsComponent {
   rowIdKeyForClients = 'id';
 
   clientItems: ClientObject[] = [];
+
+  clientFormConfig: FormConfig = {
+    title: 'Додати нового клієнта',
+    submitText: 'Зберегти',
+    fields: [
+      {
+        key: 'edrpo', // Або як воно у тебе називається в моделі
+        label: 'ЄДРПОУ',
+        type: 'text',
+        validators: [Validators.required, Validators.pattern('^[0-9]{8,10}$')] // Валідація: 8-10 цифр
+      },
+      {
+        key: 'name',
+        label: 'Назва компанії',
+        type: 'text',
+        validators: [Validators.required]
+      },
+      {
+        key: 'email',
+        label: 'Email',
+        type: 'email',
+        validators: [Validators.required, Validators.email]
+      },
+      {
+        key: 'contactPersonName',
+        label: 'Контактна особа',
+        type: 'text',
+        validators: [Validators.required]
+      },
+      {
+        key: 'contactPersonPhone',
+        label: 'Телефон',
+        type: 'text',
+        validators: [Validators.required]
+      }
+    ]
+  };
+
 
   ngOnInit() {
     this.clientService.getClients().subscribe({
@@ -73,24 +116,57 @@ export class ClientsComponent {
     // URL буде виглядати так: /contracts?clients=1,5,12
   }
 
-    openAddDialog() {
-      const dialogRef = this.dialog.open(ClientDialogWrapperComponent, {
-        width: '400px',
-        data: null, // Даних немає -> Режим створення
-        disableClose: true
+      openAddDialog() {
+    // Відкриваємо нашу НОВУ універсальну обгортку для діалогів
+    const dialogRef = this.dialog.open(DynamicFormDialogComponent, {
+      width: '500px',
+      data: this.clientFormConfig, // Передаємо конфігурацію як data
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result: ClientObject | null) => {
+      // Якщо користувач натиснув "Зберегти" (результат є)
       if (result) {
         console.log('Creating new client:', result);
         this.clientService.addClient(result).subscribe({
           next: (createdClient) => {
-            this.clientItems.push(createdClient);
+            // Оновлюємо таблицю (створюємо новий масив, щоб Angular помітив зміни)
+            this.clientItems = [...this.clientItems, createdClient];
             console.log('Client created successfully:', createdClient);
           }
         });
       }
     });
+  }
+
+  loadAllClients(page: number = 0) {
+    this.clientService.getClients(page).subscribe({
+      next: (clients) => {
+        this.clientItems = clients; 
+      },
+      error: (err) => {
+        console.error('Помилка завантаження клієнтів:', err);
+      }
+    });
+  }
+
+  goToPreviousPage() {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadAllClients(this.currentPage);
+    } else {
+      console.warn('Ви вже на першій сторінці!');
+    }
+
+  }
+
+  goToNextPage() {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.loadAllClients(this.currentPage);
+    } else {
+      console.warn('Ви вже на останній сторінці!');
+    }
   }
 
 }

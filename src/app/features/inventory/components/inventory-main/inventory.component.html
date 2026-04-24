@@ -1,18 +1,26 @@
 
-<div class="inventory-container">
-    <h2>Inventory Management</h2>
-    <div class="inventory-actions">
-        <button mat-raised-button color="primary" (click)="openAddDialog()">Add New Item</button>
-        <button mat-raised-button color="warn" [disabled]="selectedInventoryItems.length === 0">Delete Item</button>
+<div class="inventory-page-wrapper">
+    <div class="inventory-sidebar">
+        <app-generic-filter 
+            [fields]="inventoryFilterConfig" 
+            (filterChanged)="applyFilter($event)">
+        </app-generic-filter>
+    </div>
+    <div class="inventory-container">
+        <h2>Inventory Management</h2>
+        <div class="inventory-actions">
+            <button mat-raised-button color="warn" [disabled]="selectedInventoryItems.length === 0">Delete Item</button>
+        </div>
+
+        <div class="inventory-list">
+            <app-table 
+            [columns]="inventoryColumns" 
+            [data]="inventoryItems" 
+            [rowIdKey]="rowIdKeyForInventory"
+            (rowClicked)="onItemSelected($event)"
+            (selectionChanged)="onSelectionChange($event)">
+            </app-table>
+        </div>
     </div>
 
-    <div class="inventory-list">
-        <app-table 
-        [columns]="inventoryColumns" 
-        [data]="inventoryItems" 
-        [rowIdKey]="rowIdKeyForInventory"
-        (rowClicked)="onItemSelected($event)"
-        (selectionChanged)="onSelectionChange($event)">
-    </app-table>
-    </div>
 </div>

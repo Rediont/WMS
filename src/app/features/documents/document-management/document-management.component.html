@@ -1,0 +1,31 @@
+<div class="documents-page-wrapper">
+    <div class="documents-sidebar">
+        <app-generic-filter 
+            [fields]="documentFilterConfig" 
+            (filterChanged)="applyFilter($event)">
+        </app-generic-filter>
+    </div>
+    <div class="documents-container">
+        <h2>Управління документами</h2>
+        <div class="documents-actions">
+            <button mat-raised-button color="primary" (click)="openAddDocumentDialog()">Додати новий документ</button>
+            <button mat-raised-button color="warn">Видалити документ</button>
+        </div>
+        <div class="documents-list">
+            <app-table 
+                [columns]="documentColumns" 
+                [data]="documentItems" 
+                [rowIdKey]="rowIdKeyForDocuments"
+                (rowClicked)="onItemSelected($event)"
+                (selectionChanged)="onSelectionChange($event)">
+            </app-table>
+        </div>
+
+        <div class="document-page-navigation">
+            <button mat-button (click)="goToPreviousPage()" [disabled]="currentPage === 0">Попередня</button>
+            <span>Сторінка {{ currentPage + 1 }}</span>
+            <button mat-button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Наступна</button>            
+        </div>
+
+    </div>
+</div>

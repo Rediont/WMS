@@ -1,0 +1,37 @@
+<div class="form-container">
+  <h2>{{ config.title }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    
+    <div *ngFor="let field of config.fields" class="form-group">
+      <label [for]="field.key">{{ field.label }}</label>
+
+      <ng-container [ngSwitch]="field.type">
+        
+        <input *ngSwitchCase="'text'" type="text" [id]="field.key" [formControlName]="field.key">
+        <input *ngSwitchCase="'number'" type="number" [id]="field.key" [formControlName]="field.key">
+        <input *ngSwitchCase="'email'" type="email" [id]="field.key" [formControlName]="field.key">
+        <input *ngSwitchCase="'date'" type="date" [id]="field.key" [formControlName]="field.key">
+
+        <select *ngSwitchCase="'select'" [id]="field.key" [formControlName]="field.key">
+          <option value="">Оберіть...</option>
+          <option *ngFor="let opt of field.options" [value]="opt.value">
+            {{ opt.label }}
+          </option>
+        </select>
+
+        <input *ngSwitchCase="'checkbox'" type="checkbox" [id]="field.key" [formControlName]="field.key">
+        
+      </ng-container>
+
+      <div *ngIf="hasError(field.key)" class="error-message">
+        Це поле заповнено невірно або є обов'язковим.
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">Скасувати</button>
+      <button type="submit" class="btn-submit" [disabled]="form.invalid">{{ config.submitText }}</button>
+    </div>
+  </form>
+</div>

@@ -7,8 +7,6 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { ClientsComponent } from './features/clients/components/client-main-component/clients.component';
 import { InventoryComponent } from './features/inventory/components/inventory-main/inventory.component';
 import { ContractsComponent } from './features/contracts/components/contracts.component';
-import { ReceiptComponent} from './features/receipts/receipt-component/receipt-component.component';
-import { ShipmentsComponent } from './features/shipments/shipments-component/shipments-component.component';
 import { WarehouseMapComponent } from './features/visual-overview/warehouse-map-component/warehouse-map-component.component';
 import { AlleyOverviewComponent } from './features/visual-overview/alley-overview-component/alley-overview-component.component';
 
@@ -18,6 +16,9 @@ import { AdminLayoutComponent } from './core/layout/admin-layout/admin-layout.co
 import { AdminUserManagementComponent } from './features/admin-panel/admin-user-management/admin-user-management.component';
 import { WarehouseSettingsComponent } from './features/admin-panel/warehouse-settings/warehouse-settings.component';
 import { adminGuard } from './core/interceptors/admin-guard.interceptor';
+import { ContractDetailsPageComponent } from './features/contracts/components/details/contracts-details-page.component';
+import { DocumentManagementComponent } from './features/documents/document-management/document-management.component';
+import { DocumentCreateComponent } from './features/documents/document-create/document-create.component';
 
 export const authGuard = () => {
   const router = inject(Router);
@@ -44,10 +45,12 @@ export const routes: Routes = [
     canActivate: [authGuard],       // Захищає ВСІ маршрути всередині children
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'clients', component: ClientsComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'contracts', component: ContractsComponent },
-      { path: 'receipts', component: ReceiptComponent },
-      { path: 'shipments', component: ShipmentsComponent },
+      { path: 'contracts/details/:id', component: ContractDetailsPageComponent },
+      { path: 'documents', component: DocumentManagementComponent },
+      { path: 'documents/new', component: DocumentCreateComponent },
       { path: 'inventory', component: InventoryComponent },
       { path: 'history', component: DashboardComponent },
       { path: 'visual-overview', component: WarehouseMapComponent },

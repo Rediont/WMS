@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ContractObject } from './models/contract.model'; // Ваш шлях до моделі
+import { ApiContractObject, ContractObject } from './models/contract.model'; // Ваш шлях до моделі
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -15,8 +15,9 @@ export class ContractService {
 
   constructor() { }
 
-  getContracts(filters?: any): Observable<any[]> {
+  getContracts( page: number = 0, filters?: any): Observable<any[]> {
     let params = new HttpParams();
+    params = params.append('page', page);
 
     if (filters) {
       // 1. Звичайні параметри (клієнт, статус)
@@ -42,11 +43,16 @@ export class ContractService {
     return this.http.get<ContractObject>(`${this.apiUrl}/${id}`);
   }
 
-  addContract(newContract: Omit<ContractObject, 'id'>): Observable<ContractObject> {
-    return this.http.post<ContractObject>(`${this.apiUrl}/add`, newContract);
+  addContract(data: ApiContractObject): Observable<ContractObject> {
+    return this.http.post<ContractObject>(`${this.apiUrl}/add`, data);
   }
 
-  updateContract(id: number, updatedData: Partial<ContractObject>): Observable<ContractObject> {
+  updateContract(id: number, updatedData: Partial<ApiContractObject>): Observable<ContractObject> {
     return this.http.put<ContractObject>(`${this.apiUrl}/${id}`, updatedData);
+  }
+
+  getTotalPages(filters?: any): Observable<number> {
+    let params = new HttpParams();
+    return this.http.get<number>(`${this.apiUrl}/total-pages`, { params });
   }
 }

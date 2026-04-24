@@ -26,18 +26,18 @@
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Кількість поверхів (ярусів)</mat-label>
-              <input matInput type="number" formControlName="numberOfAlleyFloors" placeholder="Наприклад: 5">
+              <input matInput type="number" formControlName="numberOfFloorsPerAlley" placeholder="Наприклад: 5">
               <mat-icon matSuffix>layers</mat-icon>
-              @if (warehouseForm.get('numberOfAlleyFloors')?.hasError('required')) {
+              @if (warehouseForm.get('numberOfFloorsPerAlley')?.hasError('required')) {
                 <mat-error>Це поле є обов'язковим</mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Комірок на одному поверсі</mat-label>
-              <input matInput type="number" formControlName="numberOfCellsInAlleyFloor" placeholder="Наприклад: 20">
+              <input matInput type="number" formControlName="CellsPerAlleyFloor" placeholder="Наприклад: 20">
               <mat-icon matSuffix>grid_on</mat-icon>
-              @if (warehouseForm.get('numberOfCellsInAlleyFloor')?.hasError('required')) {
+              @if (warehouseForm.get('CellsPerAlleyFloor')?.hasError('required')) {
                 <mat-error>Це поле є обов'язковим</mat-error>
               }
             </mat-form-field>

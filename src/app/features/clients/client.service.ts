@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ClientObject } from './models/client.model'; // Ваш шлях до моделі
 import { environment } from '../../../environments/environment';
@@ -15,8 +15,10 @@ export class ClientService {
 
   constructor() { }
 
-  getClients(): Observable<ClientObject[]> {
-    return this.http.get<ClientObject[]>(`${this.apiUrl}/all`);
+  getClients(page: number = 0): Observable<ClientObject[]> {
+    const params = new HttpParams().set('page', page);
+
+    return this.http.get<ClientObject[]>(`${this.apiUrl}/all`, { params });
   }
 
   getClientById(id: number): Observable<ClientObject> {

@@ -35,8 +35,8 @@ export class WarehouseSettingsComponent {
   ) {
     this.warehouseForm = this.fb.group({
       numberOfAlleys: [null, [Validators.required, Validators.min(1)]],
-      numberOfAlleyFloors: [null, [Validators.required, Validators.min(1)]],
-      numberOfCellsInAlleyFloor: [null, [Validators.required, Validators.min(1)]]
+      numberOfFloorsPerAlley: [null, [Validators.required, Validators.min(1)]],
+      CellsPerAlleyFloor: [null, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -47,8 +47,8 @@ export class WarehouseSettingsComponent {
   }
 
   calculateTotals(values: any) {
-    const floors = values.numberOfAlleyFloors || 0;
-    const cellsPerFloor = values.numberOfCellsInAlleyFloor || 0;
+    const floors = values.numberOfFloorsPerAlley || 0;
+    const cellsPerFloor = values.CellsPerAlleyFloor || 0;
     const alleys = values.numberOfAlleys || 0;
 
     this.calculatedCellsInAlley = floors * cellsPerFloor;
@@ -57,12 +57,30 @@ export class WarehouseSettingsComponent {
 
   onSubmit() {
     if (this.warehouseForm.valid) {
-      console.log('Відправляємо:', this.warehouseForm.value);
-      var floors = this.warehouseForm.value.numberOfAlleyFloors;
-      var cellsPerFloor = this.warehouseForm.value.numberOfCellsInAlleyFloor;
-      var alleys = this.warehouseForm.value.numberOfAlleys;
+      
+      const floors = this.warehouseForm.value.numberOfFloorsPerAlley;
+      const cellsPerFloor = this.warehouseForm.value.CellsPerAlleyFloor;
+      const alleys = this.warehouseForm.value.numberOfAlleys;
 
-     this.warehouseSettingsService.updateWarehouseSettings({ numberOfAlleys: alleys, numberOfAlleyFloors: floors, numberOfCellsInAlleyFloor: cellsPerFloor });
+      // 1. Формуємо об'єкт так, щоб ключі ТОЧНО збігалися з WarehouseSettingsDto в C#
+      const payload = {
+        numberOfAlleys: alleys,
+        numberOfFloorsPerAlley: floors, // Було: numberOfAlleyFloors
+        cellsPerAlleyFloor: cellsPerFloor // Було: numberOfCellsInAlleyFloor
+      };
+
+      console.log('Відправляємо на бекенд:', payload);
+
+      // 2. ОБОВ'ЯЗКОВО додаємо .subscribe(), інакше запит не полетить!
+      this.warehouseSettingsService.updateWarehouseSettings(payload).subscribe({
+        next: (response) => {
+          console.log('Успіх! Налаштування збережено:', response);
+          // Тут можна показати тост (повідомлення) про успіх
+        },
+        error: (err) => {
+          console.error('Помилка при збереженні:', err);
+        }
+      });
     }
   }
 

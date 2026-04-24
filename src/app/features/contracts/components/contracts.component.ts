@@ -3,12 +3,16 @@ import { GenericTableComponent } from '../../../shared/generic-table/app-table.c
 import { TableColumn } from '../../../shared/generic-table/table-config.model';
 import { MatButton } from "@angular/material/button";
 import { MatDivider } from "@angular/material/divider";
-import { ContractObject } from '../models/contract.model';
+import { ApiContractObject, ContractObject } from '../models/contract.model';
 import { ContractService } from '../contract.service';
 import { FilterField } from '../../../shared/generic-filter/model/generic-filter.model';
 import { GenericFilterComponent } from '../../../shared/generic-filter/component/generic-filter.component';
 import { AppStateService } from '../../../core/state.service/state.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormConfig } from '../../../shared/dynamic-form/models/dynamic-form.model';
+import { Validators } from '@angular/forms';
+import { DynamicFormDialogComponent } from '../../../shared/dynamic-form/dynamic-form-component/dynamic-form-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-contracts',
@@ -18,19 +22,25 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ContractsComponent {
 
+  private dialog = inject(MatDialog);
   private contractService = inject(ContractService);
   private appState = inject(AppStateService);
-  private route = inject(ActivatedRoute); // ДОДАНО: для читання URL
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   // Отримуємо доступ до компонента фільтра, щоб програмно викликати apply()
   @ViewChild(GenericFilterComponent) filterComponent!: GenericFilterComponent;
 
+  currentPage : number = 0;
+  totalPages : number = 0;
+
+
   contractColumns: TableColumn[] = [
     { key: 'index', label: '№' },
-    { key: 'id', label: 'Contract ID' },
-    { key: 'name', label: 'Name' },
-    { key: 'clientId', label: 'Client ID' },
-    { key: 'status', label: 'Status' }
+    { key: 'contractId', label: 'Contract ID' },
+    { key: 'contractName', label: 'Name' },
+    { key: 'clientName', label: 'Client Name' },
+    { key: 'statusDisplay', label: 'Status' }
   ];
 
   contractFilterConfig: FilterField[] = [
@@ -61,43 +71,118 @@ export class ContractsComponent {
     }
   ];
 
-
   contractItems: ContractObject[] = [];
 
   rowIdKeyForContracts = 'id';
+  
+  contractFormConfig: FormConfig = {
+    title: 'Додати новий контракт',
+    submitText: 'Зберегти',
+    fields: [
+      {
+        // ДОДАНО: Поле для вибору клієнта
+        key: 'clientId',
+        label: 'Клієнт',
+        type: 'select',
+        validators: [Validators.required],
+        options: [] // Поки що порожньо, наповнимо в ngOnInit
+      },
+      {
+        key: 'name',
+        label: 'Назва контракту',
+        type: 'text',
+        validators: [Validators.required, Validators.minLength(3)]
+      },
+      {
+        key: 'currentStatus',
+        label: 'Поточний статус',
+        type: 'select',
+        validators: [Validators.required],
+        options: [
+          { value: 0, label: 'Неактивний' },
+          { value: 1, label: 'Активний' },
+          { value: 2, label: 'Розірваний' },
+          { value: 3, label: 'Завершений' },
+          { value: 4, label: 'Недійсний' }
+        ],
+        // Можеш встановити статус за замовчуванням (наприклад, одразу "Активний")
+        defaultValue: 1 
+      }
+    ]
+  };
 
-ngOnInit() {
+  ngOnInit() {
     this.populateClientFilter();
+    this.populateClientFormOptions();
 
-    // Замість простого завантаження всіх контрактів, ми підписуємося на URL параметри
+    this.contractService.getTotalPages().subscribe({
+      next: (pages) => {
+        this.totalPages = pages;
+        console.log('Total pages:', this.totalPages);
+      },
+      error: (err) => console.error('Помилка отримання кількості сторінок:', err)
+    });
+
     this.route.queryParams.subscribe(params => {
-      
-      // Перевіряємо, чи є параметр 'clients' (наприклад, ?clients=5)
       if (params['clients']) {
         // Беремо ID першого клієнта з URL (оскільки у нас звичайний select)
         const clientIdFromUrl = Number(params['clients'].split(',')[0]);
 
-        // Чекаємо мікросекунду, щоб ViewChild (компонент фільтра) встиг ініціалізуватися
         setTimeout(() => {
           this.setInitialFilters(clientIdFromUrl);
         });
 
       } else {
-        // Якщо параметрів немає, просто вантажимо всі контракти
-        this.loadAllContracts();
+        const statusMap: { [key: number]: string } = {
+          0: 'Inactive',
+          1: 'Active',
+          2: 'Terminated',
+          3: 'Completed',
+          4: 'Invalid'
+        };
+
+        this.contractItems = this.appState.lookups.contracts.map(c => ({
+
+          contractId: c.id,
+          contractName: c.contractName,
+          clientId: c.clientId,
+          clientName: c.clientName,
+          statusDisplay: statusMap[c.status] ?? 'Unknown',
+          
+        }));
       }
     });
   }
 
   // Виніс завантаження контрактів в окремий метод для зручності
-  private loadAllContracts() {
-    this.contractService.getContracts().subscribe({
+  private loadAllContracts( page: number = 0) {
+    this.contractService.getContracts(page).subscribe({
       next: (contracts) => {
-        this.contractItems = contracts;
+        console.log('Дані, що прийшли з бекенду:', contracts);
+
+        // Словник, де 0 — це Inactive (згідно з твоїм C# Enum)
+        const statusMap: { [key: number]: string } = {
+          0: 'Inactive',
+          1: 'Active',
+          2: 'Terminated',
+          3: 'Completed',
+          4: 'Invalid'
+        };
+
+        this.contractItems = contracts.map(c => {
+          // Перевіряємо, чи є в об'єкті clientName (для дебагу)
+          if (!c.clientName) {
+            console.warn(`Контракт ID ${c.id} прийшов без імені клієнта!`);
+          }
+
+          return {
+            ...c,
+            // Створюємо окреме текстове поле, яке таблиця точно відобразить
+            statusDisplay: statusMap[c.status] ?? 'Unknown'
+          };
+        });
       },
-      error: (err) => {
-        console.error('Error loading contracts:', err);
-      }
+      error: (err) => console.error('Помилка завантаження:', err)
     });
   }
 
@@ -110,6 +195,21 @@ ngOnInit() {
 
     // Оновлюємо конфігурацію фільтра (важливо робити це через .map(), щоб Angular помітив зміни)
     this.contractFilterConfig = this.contractFilterConfig.map(field => {
+      if (field.key === 'clientId') {
+        return { ...field, options: clientOptions };
+      }
+      return field;
+    });
+  }
+
+  private populateClientFormOptions() {
+    const clientOptions = this.appState.lookups.clients.map(client => ({
+      value: client.id,
+      label: client.name
+    }));
+
+    // 2. Знаходимо поле 'clientId' у конфігурації форми і оновлюємо його options
+    this.contractFormConfig.fields = this.contractFormConfig.fields.map(field => {
       if (field.key === 'clientId') {
         return { ...field, options: clientOptions };
       }
@@ -133,14 +233,82 @@ ngOnInit() {
 
   applyFilter(filterValues: any) {
     console.log('Дані з фільтра:', filterValues);
-    // Тут буде логіка відправки запиту на C# бекенд або фільтрації локального масиву
+  }
+
+  openAddContractDialog() {
+    const dialogRef = this.dialog.open(DynamicFormDialogComponent, {
+      width: '450px',
+      data: this.contractFormConfig,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Новий контракт:', result);
+
+        const apiPayload: ApiContractObject = {
+          clientId: Number(result.clientId),
+          name: result.name,        
+          currentStatus: Number(result.currentStatus)
+        };
+
+        this.contractService.addContract(apiPayload).subscribe({
+          next: (createdContract) => {
+            // Оскільки createdContract приходить з бекенду (можливо без clientName і statusDisplay),
+            // нам треба його "домапити" для таблиці, щоб він одразу красиво з'явився
+            
+            const statusMap: { [key: number]: string } = {
+              0: 'Inactive',
+              1: 'Active', 
+              2: 'Terminated', 
+              3: 'Completed', 
+              4: 'Invalid'
+            };
+            
+            // Шукаємо ім'я клієнта у словнику, щоб показати в таблиці
+            const matchedClient = this.appState.lookups.clients.find(c => c.id == createdContract.clientId);
+            
+            const newTableItem: ContractObject = {
+              contractId: createdContract.contractId,
+              contractName: createdContract.contractName, // або createdContract.name залежно від того що повертає DTO після створення
+              clientId: createdContract.clientId,
+              clientName: matchedClient ? matchedClient.name : 'Невідомий клієнт',
+              statusDisplay: statusMap[apiPayload.currentStatus] ?? 'Unknown',
+            };
+
+            this.contractItems = [...this.contractItems, newTableItem];
+            console.log('Контракт успішно створений та доданий в таблицю:', newTableItem);
+          }
+        });
+      }
+    });
   }
 
   onItemSelected(item: any) {
     console.log('Selected contract:', item);
+    this.router.navigate(['/contracts/details', item.contractId])
   }
 
   onSelectionChange(selectedItems: any[]) {
     console.log('Selected contracts changed:', selectedItems);
   }
+
+  goToPreviousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadAllContracts(this.currentPage); 
+    } else {
+      console.warn('Ви вже на першій сторінці!');
+    } 
+  }
+
+  goToNextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadAllContracts(this.currentPage); // Підвантажуємо контракти для нової сторінки
+    } else {
+      console.warn('Ви вже на останній сторінці!');
+    }
+  }
+
 }

@@ -9,7 +9,7 @@
 
 .client-list {
   flex-grow: 1;
-  height: 400px;
+  height: 350px;
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: gray;
@@ -30,4 +30,14 @@ h2{
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.page-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 5px;
 }
