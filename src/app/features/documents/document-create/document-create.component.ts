@@ -31,6 +31,7 @@ export class DocumentCreateComponent {
   documentForm!: FormGroup;
 
   ngOnInit() {
+    console.log('Палети в стейті:', this.appState.lookups.palletTypes);
     this.initForm();
   }
 

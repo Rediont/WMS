@@ -19,6 +19,7 @@ import { adminGuard } from './core/interceptors/admin-guard.interceptor';
 import { ContractDetailsPageComponent } from './features/contracts/components/details/contracts-details-page.component';
 import { DocumentManagementComponent } from './features/documents/document-management/document-management.component';
 import { DocumentCreateComponent } from './features/documents/document-create/document-create.component';
+import { PalletTypesComponent } from './features/admin-panel/pallet-types/component/pallet-types.component';
 
 export const authGuard = () => {
   const router = inject(Router);
@@ -66,7 +67,8 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'users', component: AdminUserManagementComponent },
-      { path: 'warehouse-settings', component: WarehouseSettingsComponent }
+      { path: 'warehouse-settings', component: WarehouseSettingsComponent },
+      { path: 'pallet-types', component: PalletTypesComponent }
     ]
   },
 

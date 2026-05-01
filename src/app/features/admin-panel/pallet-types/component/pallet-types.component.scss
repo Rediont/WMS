@@ -1,0 +1,39 @@
+.pallet-types-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(80vh - 40px); /* 100% висоти вікна мінус невеликий відступ */
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.pallet-types-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Займає всю вільну ширину */
+  min-width: 0; /* Щоб таблиця не ламала сітку */
+  height: 100%;
+  gap: 16px;
+}
+
+.pallet-types-list {
+  flex-grow: 1; /* Таблиця розтягується до самого низу екрана */
+  border-radius: 8px;
+  background-color: #f5f5f5; /* Світло-сірий фон для контрасту з таблицею */
+  border: 1px solid #444;
+  overflow: hidden;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.pallet-types-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; 
+}
+
+h2 {
+  margin: 0;
+  color: white;
+}

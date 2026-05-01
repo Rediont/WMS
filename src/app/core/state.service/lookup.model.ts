@@ -12,6 +12,9 @@ export interface ContractLookupItem {
   status: number; 
 }
 
+export interface PalletTypeLookupItem extends LookupItem {
+  size: string;
+}
 
 export interface WarehouseSettingsLookup {
   numberOfAlleys: number;
@@ -24,7 +27,7 @@ export interface WarehouseSettingsLookup {
 export interface GlobalLookup {
   clients: LookupItem[];
   contracts: ContractLookupItem[];
-  palletTypes: LookupItem[];
+  palletTypes: PalletTypeLookupItem[];
   warehouseSettings: WarehouseSettingsLookup;
   documentTypes: LookupItem[];
 }
