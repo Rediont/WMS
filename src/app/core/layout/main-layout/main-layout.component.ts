@@ -7,15 +7,10 @@ import { AuthService } from '../../authentification/auth.service';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [HeaderComponent, SidebarComponent, RouterOutlet, AdminSidebarComponent],
+  imports: [HeaderComponent, SidebarComponent, RouterOutlet],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss'
 })
 export class MainLayoutComponent {
 
-  user = this.authService.currentUser; 
-  
-  isAdmin = computed(() => this.user()?.role === 'Admin');
-
-  constructor(private authService: AuthService) {}
 }

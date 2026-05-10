@@ -8,6 +8,8 @@ import { FilterField } from '../../../shared/generic-filter/model/generic-filter
 import { AppStateService } from '../../../core/state.service/state.service';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { DocumentService } from '../document.service';
 
 @Component({
   selector: 'app-document-management',
@@ -19,6 +21,8 @@ export class DocumentManagementComponent {
   private Dialog = inject(MatDialog);
   private appState = inject(AppStateService);
   private router = inject(Router);
+  private sub?: Subscription;
+  private documentService = inject(DocumentService)
 
   currentPage: number = 0;
   totalPages: number = 0;
@@ -27,10 +31,10 @@ export class DocumentManagementComponent {
 
   documentColumns: TableColumn[] = [
     { key: 'index', label: '№' },
-    { key: 'type', label: 'Document Type' },
-    { key: 'client', label: 'Client' },
-    { key: 'contract', label: 'Contract' },
-    { key: 'createdDate', label: 'Created Date' }
+    { key: 'type', label: 'Тип документа' },
+    { key: 'clientName', label: 'Клієнт' },
+    { key: 'contractName', label: 'Контракт' },
+    { key: 'creationDate', label: 'Дата створення' }
   ];
 
   rowIdKeyForDocuments = 'index';
@@ -45,7 +49,25 @@ export class DocumentManagementComponent {
 
   // 💡 2. Викликаємо заповнення при старті
   ngOnInit() {
+    this.documentService.getDocuments(0).subscribe({
+      next: (response : any) => {
+        this.documentItems = response
+      },
+      error: (err : any) => {
+        console.log(err)
+      }
+    })
     this.populateFilters();
+    this.sub = this.documentService.documentCreated$.subscribe((newDoc) => {
+      this.documentItems.unshift(newDoc);
+    });
+  }
+
+  ngOnDestroy() {
+    // Важливо відписатися, щоб не було витоку пам'яті
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   // 💡 3. Метод для розкладання даних зі стейту по випадаючих списках
@@ -101,7 +123,7 @@ export class DocumentManagementComponent {
   }
 
   openAddDocumentDialog() {
-    this.router.navigate(['/documents/new']);
+    this.router.navigate(['workflow/documents/new']);
   }
 
   goToNextPage() {

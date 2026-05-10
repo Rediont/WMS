@@ -20,6 +20,9 @@ import { ContractDetailsPageComponent } from './features/contracts/components/de
 import { DocumentManagementComponent } from './features/documents/document-management/document-management.component';
 import { DocumentCreateComponent } from './features/documents/document-create/document-create.component';
 import { PalletTypesComponent } from './features/admin-panel/pallet-types/component/pallet-types.component';
+import { AdminTabComponent } from './core/layout/tab-components/admin-tab-component/admin-tab.component';
+import { WarehouseManagementTabComponent } from './core/layout/tab-components/warehouse-management-tab/warehouse-management-tab.component';
+import { WorkflowTabComponent } from './core/layout/tab-components/workflow-tab/workflow-tab.component';
 
 export const authGuard = () => {
   const router = inject(Router);
@@ -48,29 +51,58 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'clients', component: ClientsComponent },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'contracts', component: ContractsComponent },
-      { path: 'contracts/details/:id', component: ContractDetailsPageComponent },
-      { path: 'documents', component: DocumentManagementComponent },
-      { path: 'documents/new', component: DocumentCreateComponent },
-      { path: 'inventory', component: InventoryComponent },
       { path: 'history', component: DashboardComponent },
-      { path: 'visual-overview', component: WarehouseMapComponent },
-      { path: 'alleys/:id', component: AlleyOverviewComponent }
+
+      {
+         path: 'admin',
+        component: AdminTabComponent,
+        canActivate: [adminGuard],
+        children: 
+        [
+          { path: '', redirectTo: 'user-management', pathMatch: 'full' },
+          { path: 'user-management', component: AdminUserManagementComponent },
+          { path: 'warehouse-settings', component: WarehouseSettingsComponent },
+          { path: 'pallet-types', component: PalletTypesComponent }
+        ]
+      },
+
+      { 
+        path: 'warehouse',
+        component: WarehouseManagementTabComponent,
+        children: [
+          { path: '', redirectTo: 'visual-overview', pathMatch: 'full'},
+          { path: 'inventory', component: InventoryComponent },
+          { path: 'visual-overview', component: WarehouseMapComponent },
+          { path: 'visual-overview/alley/:id', component: AlleyOverviewComponent}
+        ]
+      },
+
+      {
+        path: 'workflow',
+        component: WorkflowTabComponent,
+        children: [
+          { path: '', redirectTo: 'contracts', pathMatch: 'full'},
+          { path: 'contracts', component: ContractsComponent },
+          { path: 'contracts/details/:id', component: ContractDetailsPageComponent },
+          { path: 'documents', component: DocumentManagementComponent },
+          { path: 'documents/new', component: DocumentCreateComponent },
+        ]
+      }
     ]
   },
 
   // 3. АДМІНСЬКА ОБОЛОНКА (Окрема робоча зона)
-  {
-    path: 'admin',
-    component: AdminLayoutComponent, // Містить адмінський сайдбар/меню
-    canActivate: [authGuard, adminGuard],        // Сюди потім можна додати adminGuard
-    children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'users', component: AdminUserManagementComponent },
-      { path: 'warehouse-settings', component: WarehouseSettingsComponent },
-      { path: 'pallet-types', component: PalletTypesComponent }
-    ]
-  },
+  // {
+  //   path: 'admin',
+  //   component: AdminLayoutComponent, // Містить адмінський сайдбар/меню
+  //   canActivate: [authGuard, adminGuard],        // Сюди потім можна додати adminGuard
+  //   children: [
+  //     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  //     { path: 'users', component: AdminUserManagementComponent },
+  //     { path: 'warehouse-settings', component: WarehouseSettingsComponent },
+  //     { path: 'pallet-types', component: PalletTypesComponent }
+  //   ]
+  // },
 
   // 4. ПЕРЕНАПРАВЛЕННЯ (Якщо ввели неіснуючий URL)
   { 

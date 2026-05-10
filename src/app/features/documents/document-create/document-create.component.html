@@ -23,6 +23,18 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <mat-label>Дата створення</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="creationDate">
+          
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+
+          @if (documentForm.get('creationDate')?.hasError('required')) {
+            <mat-error>Дата обов'язкова</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>Клієнт</mat-label>
           <mat-select formControlName="clientId">
             @for (client of appState.lookups.clients; track client.id) {

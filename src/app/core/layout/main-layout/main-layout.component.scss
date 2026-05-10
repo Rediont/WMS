@@ -10,6 +10,13 @@
     background: linear-gradient(rgb(70,70,70),rgb(60,60,60)) ; 
 }
 
+.main-sidebars {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+}
+
 .main-content {
     flex-grow: 10;
     display: flex;

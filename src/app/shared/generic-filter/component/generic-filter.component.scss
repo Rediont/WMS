@@ -12,11 +12,13 @@
 /* Блок, який буде скролитися */
 .filter-content {
   flex: 1; /* Займає весь вільний простір від верху до кнопок */
+
   overflow-y: auto; /* Вмикаємо суцільний вертикальний скрол */
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding-right: 8px; /* Додаємо відступ, щоб повзунок скролу не налізав на контент */
+  
 
   /* Робимо скролбар тоншим і красивішим (працює в Chrome/Edge/Safari) */
   &::-webkit-scrollbar {

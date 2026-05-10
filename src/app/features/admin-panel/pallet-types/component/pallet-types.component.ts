@@ -26,6 +26,7 @@ export class PalletTypesComponent {
     {key: 'id', label: 'ID'},
     {key: 'name', label: 'Назва'},
     {key: 'size', label: 'Розмір'},
+    {key: 'cost', label: 'Ціна'}
   ];
 
   palletTypeItems: PalletType[] = [];
@@ -47,6 +48,12 @@ export class PalletTypesComponent {
       label: 'Розмір напр. 1.2 (в метрах)',
       type: 'number',
       validators: [Validators.required, Validators.maxLength(50)]
+    },
+    {
+      key: 'cost',
+      label: 'Ціна за день зберігання(в гривнях)',
+      type: 'number',
+      validators: [Validators.required]
     }
   ]
 };

@@ -25,7 +25,7 @@ export class WarehouseMapComponent {
   }
 
   goToAlley(alleyId: number) {
-    this.router.navigate(['/alleys', alleyId]); 
+    this.router.navigate(['warehouse/visual-overview/alley/:id', alleyId]); 
   }
 
   getOccupancyColor(occupancy: number): string {

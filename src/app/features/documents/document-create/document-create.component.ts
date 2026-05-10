@@ -4,10 +4,12 @@ import { AppStateService } from '../../../core/state.service/state.service';
 import { DocumentService } from '../document.service';
 import { MatIcon } from "@angular/material/icon";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { MatOption } from "@angular/material/core";
+import { MatNativeDateModule, MatOption } from "@angular/material/core";
 import { MatSelectModule } from '@angular/material/select';
 import { Location } from '@angular/common';
 import { MatButton } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-document-create',
@@ -18,7 +20,10 @@ import { MatButton } from '@angular/material/button';
     MatOption, 
     MatSelectModule, 
     ReactiveFormsModule, 
-    MatButton],
+    MatInputModule,
+    MatButton,
+    MatDatepickerModule,
+    MatNativeDateModule],
   templateUrl: './document-create.component.html',
   styleUrl: './document-create.component.scss'
 })
@@ -37,6 +42,7 @@ export class DocumentCreateComponent {
 
   private initForm() {
     this.documentForm = this.fb.group({
+      creationDate: [new Date(), Validators.required],
       documentTypeId: [null, Validators.required],
       clientId: [null, Validators.required],
       contractId: [null, Validators.required],
@@ -75,17 +81,66 @@ export class DocumentCreateComponent {
 
   onSubmit() {
     if (this.documentForm.valid) {
-      if (this.items.length === 0) {
+      const formValue = this.documentForm.value;
+
+      // Перевіряємо, чи є хоча б один рядок у FormArray
+      if (!formValue.items || formValue.items.length === 0) {
         alert('Додайте хоча б один тип палет до документа!');
         return;
       }
 
-      console.log('Відправляємо на сервер:', this.documentForm.value);
+      // 1. Перетворюємо масив з форми на Словник (Dictionary)
+      const itemsDictionary: { [key: number]: number } = {};
       
-      // this.documentService.createDocument(this.documentForm.value).subscribe({
-      //   next: () => this.goBack(),
-      //   error: (err) => console.error(err)
-      // });
+      formValue.items.forEach((item: any) => {
+        const palletId = Number(item.palletTypeId);
+        const amount = Number(item.expectedAmount);
+
+        if (itemsDictionary[palletId]) {
+          itemsDictionary[palletId] += amount;
+        } else {
+          itemsDictionary[palletId] = amount;
+        }
+      });
+
+      // 2. Формуємо DTO
+      const payload = {
+        documentTypeId: Number(formValue.documentTypeId),
+        clientId: Number(formValue.clientId),
+        contractId: Number(formValue.contractId),
+        creationDate: formValue.creationDate.toISOString(),
+        items: {
+          items: itemsDictionary 
+        }
+      };
+
+      console.log('Відправляємо на сервер:', payload);
+      
+      let request$;
+
+      if (payload.documentTypeId === 0) { 
+        request$ = this.documentService.createReceipt(payload);
+      } else if (payload.documentTypeId === 1) { 
+        request$ = this.documentService.createShipment(payload);
+      } else {
+        alert('Помилка: Невідомий тип документа!');
+        return;
+      }
+
+      // 4. Підписуємося і відправляємо на бекенд
+      request$.subscribe({
+        next: (createdDocument) => {
+          this.documentService.documentCreated$.next(createdDocument);
+          this.goBack();
+        },
+        error: (err) => {
+          console.error('Помилка створення:', err);
+          
+          const errorMessage = typeof err.error === 'string' ? err.error : 'Сталася помилка при збереженні бази даних.';
+          alert(errorMessage);
+        }
+      });
+
     } else {
       this.documentForm.markAllAsTouched();
     }

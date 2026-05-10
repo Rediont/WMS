@@ -8,6 +8,7 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/m
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../core/authentification/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ import { environment } from '../../../environments/environment';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  private authService = inject(AuthService);
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private router = inject(Router);
@@ -50,7 +52,8 @@ export class LoginComponent {
         // Зберігаємо токен
         localStorage.setItem('token', response.token);
         
-        // Тепер, коли ми залогінені, стягуємо лукапи (словники)
+        this.authService.updateUser(); // Оновлюємо інформацію про користувача в AuthService
+
         this.appState.loadGlobalLookups().subscribe({
           next: () => {
             console.log('Словники завантажено, переходимо в систему!');

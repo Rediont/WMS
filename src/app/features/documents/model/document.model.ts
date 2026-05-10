@@ -1,9 +1,11 @@
 export interface DocumentObject {
-  id: string;
+  id: number;
   type: string;
-  client: string;
-  contract: string;
-  createdDate: Date;
+  clientId: number;
+  clientName: string;
+  contractId: number;
+  contractName: string;
+  creationDate: string;
 }
 
 export interface DocumentItemForm {
@@ -17,3 +19,4 @@ export interface NewDocumentForm {
   contractId: number;
   items: DocumentItemForm[];
 }
+

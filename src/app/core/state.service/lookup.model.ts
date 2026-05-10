@@ -14,6 +14,7 @@ export interface ContractLookupItem {
 
 export interface PalletTypeLookupItem extends LookupItem {
   size: string;
+  cost: number;
 }
 
 export interface WarehouseSettingsLookup {
