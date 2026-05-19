@@ -1,0 +1,78 @@
+/* Головна обгортка сторінки */
+.payments-page-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  max-height: 440px;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+/* Ліва колонка (Сайдбар) */
+.payments-sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  // height: 100%;
+  
+  background-color: #2c2c2c; /* Трохи світліший за чорний фон сторінки */
+  border: 1px solid #444;    /* Темна рамка */
+  border-radius: 8px;
+  
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Права колонка (Контент) */
+.payments-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; 
+  min-width: 0;
+  // height: 100%;
+  gap: 16px;
+}
+
+h2 {
+  margin: 0;
+  color: white;
+}
+
+.payments-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; 
+}
+
+.page-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 5px;
+}
+
+/* Блок самої таблиці */
+.payments-list {
+  flex-grow: 1; /* Таблиця розтягується до самого низу екрана */
+  border-radius: 8px;
+  background-color: #f5f5f5; /* Світло-сірий фон для контрасту з таблицею */
+  border: 1px solid #444;
+  overflow: hidden;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+/* Змушуємо саму таблицю всередині займати весь простір і скролитися */
+app-table {
+  flex-grow: 1;  
+  overflow: auto;
+}
+
+app-generic-filter {
+  /* Щоб фільтр займав всю висоту сайдбару і міг скролитися, якщо буде багато полів */
+  height: 100%;
+}

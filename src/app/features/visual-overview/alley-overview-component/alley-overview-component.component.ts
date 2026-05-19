@@ -61,8 +61,6 @@ export class AlleyOverviewComponent {
         this.availableSpotsSet.clear();
         
         cells.forEach(c => {
-          // Створюємо унікальний ключ-координату, наприклад "3-5" (поверх 3, комірка 5)
-          // Примітка: використовуємо c.cellId як індекс у ряду
           const coordinateKey = `${c.floorIndex}-${c.cellId}`;
           this.availableSpotsSet.add(coordinateKey);
         });

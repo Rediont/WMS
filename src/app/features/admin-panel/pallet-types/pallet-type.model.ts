@@ -2,7 +2,7 @@
 export interface PalletType {
     id: number;
     name: string;
-    size: string;
+    size: number;
     cost: number;
 }
 

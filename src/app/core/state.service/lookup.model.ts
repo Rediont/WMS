@@ -13,7 +13,7 @@ export interface ContractLookupItem {
 }
 
 export interface PalletTypeLookupItem extends LookupItem {
-  size: string;
+  size: number;
   cost: number;
 }
 

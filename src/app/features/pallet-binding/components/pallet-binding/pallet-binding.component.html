@@ -1,0 +1,106 @@
+<div class="binding-container">
+  
+  <header class="binding-header">
+    <div class="dropdown-group">
+      
+      <mat-form-field appearance="fill" subscriptSizing="dynamic">
+        <mat-label>Документ надходження</mat-label>
+        <mat-select [value]="selectedDocumentId()" (selectionChange)="onDocumentChange($event.value)">
+          @for (doc of documents(); track doc.documentId) {
+            <mat-option [value]="doc.documentId">Прихід №{{ doc.documentId }} (палет: {{ doc.totalActivePallets }})</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" subscriptSizing="dynamic">
+        <mat-label>Тип палети</mat-label>
+        <mat-select [value]="selectedPalletType()" (selectionChange)="onPalletTypeChange($event.value)" [disabled]="!selectedDocumentId() || palletTypes().length === 0">
+          @for (typeId of palletTypes(); track typeId) {
+            <mat-option [value]="typeId">
+              {{ getPalletTypeName(typeId) }} ({{ getPalletCountForType(typeId) }}шт.)
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" subscriptSizing="dynamic">
+        <mat-label>Алея для розміщення</mat-label>
+        <mat-select [value]="selectedAlleyId()" (selectionChange)="onAlleyChange($event.value)">
+          @for (alley of alleys(); track alley.id) {
+            <mat-option [value]="alley.id">
+              {{ alley.name }} — Заповненість: {{ alley.occupancy }}%
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      
+    </div>
+
+    <div class="header-actions">
+      <button mat-raised-button color="primary" [disabled]="!canSaveBatch()" (click)="saveBindingBatch()">
+        <mat-icon>save</mat-icon> Зберегти пакет прив'язок
+      </button>
+    </div>
+  </header>
+
+  <div class="binding-workspace">
+    
+    <aside class="pallet-buffer-sidebar">
+      <div class="panel-header">
+        <h3>Палети до розміщення</h3>
+        <span class="badge">{{ unboundPallets().length }} шт.</span>
+      </div>
+      
+      <div class="pallet-list">
+        @for (pallet of unboundPallets(); track pallet.palletId) {
+          <div class="pallet-card" 
+               [class.selected]="selectedPalletForBinding()?.palletId === pallet.palletId"
+               (click)="selectPalletForBinding(pallet)">
+            <div class="pallet-icon">
+              <mat-icon>inventory_2</mat-icon>
+            </div>
+            <div class="pallet-info">
+              <span class="pallet-id">ID палети: #{{ pallet.palletId }}</span>
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-buffer">
+            <mat-icon>done_all</mat-icon>
+            <p>Усі палети цього типу для обраного документа вже мають своє місце!</p>
+          </div>
+        }
+      </div>
+    </aside>
+
+    <main class="alley-grid-zone">
+      @if (selectedAlleyId()) {
+        <div class="rack-view">
+          @for (floor of alleyFloorMap(); track floor.floorIndex) {
+            <div class="floor-row">
+              <div class="floor-title">Поверх {{ floor.floorIndex }}</div>
+              
+              <div class="slots-container">
+                @for (cell of floor.cellOccupancies; track cell.cellIndex) {
+                  <div class="cell-slot"
+                       [style.background-color]="getCellColor(cell)"
+                       [class.target-ready]="selectedPalletForBinding() !== null"
+                       [class.disabled-cell]="isCellTooSmallForSelectedPallet(cell.freeCapacity)"
+                       (click)="bindSelectedPalletToCell(cell.cellIndex, floor.floorIndex)">
+                    <span class="slot-number">{{ cell.cellIndex }}</span>
+                    <span class="slot-capacity">Вільних: {{ cell.freeCapacity }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="select-alley-prompt">
+          <mat-icon>view_comfy</mat-icon>
+          <p>Будь ласка, оберіть алею вгорі, щоб відкрити карту стелажів</p>
+        </div>
+      }
+    </main>
+
+  </div>
+</div>

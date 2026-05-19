@@ -1,4 +1,4 @@
-export interface ContractObject {
+export interface Contract {
     contractId: number;
     contractName: string;
     clientId: number;
@@ -10,4 +10,6 @@ export interface ApiContractObject {
     name: string;
     clientId: number;
     currentStatus: number; 
+    StartDate: string; 
+    EndDate: string;
 }

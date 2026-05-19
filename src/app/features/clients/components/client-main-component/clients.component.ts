@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { TableColumn } from '../../../../shared/generic-table/table-config.model';
 import { GenericTableComponent } from "../../../../shared/generic-table/app-table.component";
-import { ClientObject } from '../../models/client.model';
+import { Client } from '../../models/client.model';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { A11yModule } from "@angular/cdk/a11y";
@@ -39,7 +39,7 @@ export class ClientsComponent {
 
   rowIdKeyForClients = 'id';
 
-  clientItems: ClientObject[] = [];
+  clientItems: Client[] = [];
 
   clientFormConfig: FormConfig = {
     title: 'Додати нового клієнта',
@@ -124,7 +124,7 @@ export class ClientsComponent {
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe((result: ClientObject | null) => {
+    dialogRef.afterClosed().subscribe((result: Client | null) => {
       // Якщо користувач натиснув "Зберегти" (результат є)
       if (result) {
         console.log('Creating new client:', result);

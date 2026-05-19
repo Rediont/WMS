@@ -1,4 +1,4 @@
-export interface ClientObject {
+export interface Client {
   id: number;
   name: string;
   EDRPO: number;

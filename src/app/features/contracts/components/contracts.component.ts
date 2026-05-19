@@ -3,7 +3,7 @@ import { GenericTableComponent } from '../../../shared/generic-table/app-table.c
 import { TableColumn } from '../../../shared/generic-table/table-config.model';
 import { MatButton } from "@angular/material/button";
 import { MatDivider } from "@angular/material/divider";
-import { ApiContractObject, ContractObject } from '../models/contract.model';
+import { ApiContractObject, Contract } from '../models/contract.model';
 import { ContractService } from '../contract.service';
 import { FilterField } from '../../../shared/generic-filter/model/generic-filter.model';
 import { GenericFilterComponent } from '../../../shared/generic-filter/component/generic-filter.component';
@@ -71,7 +71,7 @@ export class ContractsComponent {
     }
   ];
 
-  contractItems: ContractObject[] = [];
+  contractItems: Contract[] = [];
 
   rowIdKeyForContracts = 'id';
   
@@ -80,18 +80,30 @@ export class ContractsComponent {
     submitText: 'Зберегти',
     fields: [
       {
-        // ДОДАНО: Поле для вибору клієнта
         key: 'clientId',
         label: 'Клієнт',
         type: 'select',
         validators: [Validators.required],
-        options: [] // Поки що порожньо, наповнимо в ngOnInit
+        options: [] 
       },
       {
         key: 'name',
         label: 'Назва контракту',
         type: 'text',
         validators: [Validators.required, Validators.minLength(3)]
+      },
+      {
+        key: 'startDate',
+        label: 'Дата початку',
+        type: 'date',
+        validators: [Validators.required],
+        defaultValue: new Date().toISOString().substring(0, 10) // Сьогодні
+      },
+      {
+        key: 'endDate',
+        label: 'Дата закінчення',
+        type: 'date',
+        validators: [Validators.required]
       },
       {
         key: 'currentStatus',
@@ -249,7 +261,9 @@ export class ContractsComponent {
         const apiPayload: ApiContractObject = {
           clientId: Number(result.clientId),
           name: result.name,        
-          currentStatus: Number(result.currentStatus)
+          currentStatus: Number(result.currentStatus),
+          StartDate: result.startDate,
+          EndDate: result.endDate
         };
 
         this.contractService.addContract(apiPayload).subscribe({
@@ -268,7 +282,7 @@ export class ContractsComponent {
             // Шукаємо ім'я клієнта у словнику, щоб показати в таблиці
             const matchedClient = this.appState.lookups.clients.find(c => c.id == createdContract.clientId);
             
-            const newTableItem: ContractObject = {
+            const newTableItem: Contract = {
               contractId: createdContract.contractId,
               contractName: createdContract.contractName, // або createdContract.name залежно від того що повертає DTO після створення
               clientId: createdContract.clientId,

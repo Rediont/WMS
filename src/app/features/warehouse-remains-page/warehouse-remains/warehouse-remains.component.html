@@ -1,0 +1,27 @@
+<div class="warehouse-remains-container">
+    <h2>Складські залишки</h2>
+    <div class="remains-actions">
+        <button mat-raised-button color="primary" class="calculate-button" (click)="onCalculate()">Обчислити залишки</button>
+        <div [formGroup]="filterForm" class="remains-filter-checkboxes">
+            <mat-checkbox formControlName="groupByClient">За клієнтами</mat-checkbox>
+            <mat-checkbox formControlName="groupByContract">За контрактами</mat-checkbox>
+            <mat-checkbox formControlName="groupByPalletType">За типами палет</mat-checkbox>
+        </div>
+        <button mat-raised-button color="warn" (click)="loadRemains()">Скинути</button>
+    </div>
+
+    <div class="remains-list">
+        <app-table 
+        [columns]="warehouseRemainsColumns" 
+        [data]="warehouseRemainsItems" 
+        [rowIdKey]="rowIdKeyForWarehouseRemains"
+        (rowClicked)="onItemSelected($event)"
+        (selectionChanged)="onSelectionChange($event)"></app-table>
+    </div>
+
+    <div class="page-buttons">
+        <button mat-button (click)="goToPreviousPage()" [disabled]="currentPage === 0">Попередня</button>
+        <span>Сторінка {{ currentPage + 1 }}</span>
+        <button mat-button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Наступна</button>
+    </div>
+</div>

@@ -1,14 +1,66 @@
-<div class="map-container">
-  <h3>Warehouse Top-Down Map</h3>
+<div class="warehouse-layout">
   
-  <div class="grid">
-    @for (alley of alleys; track alley.id) {
-      <div class="alley-block" 
-            (click)="goToAlley(alley.id)"
-            [style.background-color]="getOccupancyColor(alley.occupancy)">
-        <span class="alley-name">{{ alley.name }}</span>
-        <span class="occupancy">{{ alley.occupancy }}% Full</span>
+  <aside class="alley-sidebar">
+    <h3>Алеї</h3>
+    <div class="alley-list">
+      @for (alley of alleys(); track alley.id) {
+        <div class="alley-item" 
+             [class.active]="selectedAlleyId() === alley.id"
+             (click)="selectAlley(alley.id)"
+             [style.border-left-color]="getOccupancyColor(alley.occupancy)">
+          <div class="alley-info">
+            <span class="name">{{ alley.name }}</span>
+            <span class="perc">{{ alley.occupancy }}%</span>
+          </div>
+          <div class="occupancy-bar">
+            <div class="fill" [style.width.%]="alley.occupancy" [style.background-color]="getOccupancyColor(alley.occupancy)"></div>
+          </div>
+        </div>
+      }
+    </div>
+  </aside>
+
+  <main class="alley-map-container">
+    @if (selectedAlley(); as currentAlley) {
+      <div class="map-header">
+        <h3>Карта алеї: {{ currentAlley.name }}</h3>
+        <button mat-raised-button color="primary" (click)="goToAlley(currentAlley.id)">
+          Перейти до стелажів
+        </button>
+      </div>
+
+      <div class="rack-vertical-view">
+        @for (floor of alleyFloorMap(); track floor.floorIndex) {
+          <div class="floor-row">
+            <div class="floor-label">Поверх {{ floor.floorIndex + 1 }}</div>
+            
+            <div class="floor-cells">
+              @for (cell of floor.cellOccupancies; track cell.cellIndex) {
+                <div class="cell-slot" 
+                     [style.background-color]="getCellSlotColor(cell.freeCapacity)"
+                     [matTooltip]="'Комірка: ' + cell.cellIndex + ', Вільно місць: ' + cell.freeCapacity"
+                     (click)="onCellClick(cell.cellIndex, floor.floorIndex)">
+                  <span class="cell-index">{{ cell.cellIndex }}</span>
+                  <span class="capacity-badge">F: {{ cell.freeCapacity }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+        
+        @if (alleyFloorMap().length === 0) {
+          <div class="no-cells-state">
+            <p>Дані про комірки для цієї алеї відсутні</p>
+          </div>
+        }
+      </div>
+
+    } @else {
+      <div class="empty-state">
+        <mat-icon>arrow_back</mat-icon>
+        <p>Оберіть алею зліва, щоб побачити карту комірок</p>
       </div>
     }
-  </div>
+  </main>
+
 </div>

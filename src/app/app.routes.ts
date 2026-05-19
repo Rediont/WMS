@@ -23,6 +23,11 @@ import { PalletTypesComponent } from './features/admin-panel/pallet-types/compon
 import { AdminTabComponent } from './core/layout/tab-components/admin-tab-component/admin-tab.component';
 import { WarehouseManagementTabComponent } from './core/layout/tab-components/warehouse-management-tab/warehouse-management-tab.component';
 import { WorkflowTabComponent } from './core/layout/tab-components/workflow-tab/workflow-tab.component';
+import { WarehouseRemainsComponent } from './features/warehouse-remains-page/warehouse-remains/warehouse-remains.component';
+import { PaymentsPageComponent } from './features/payment-system/payments-page/payments-page.component';
+import { BillPageComponent } from './features/payment-system/bill-page/bill-page.component';
+import { PalletBindingMainComponent } from './features/pallet-binding/components/pallet-binding-main/pallet-binding-main.component';
+import { PalletBindingComponent } from './features/pallet-binding/components/pallet-binding/pallet-binding.component';
 
 export const authGuard = () => {
   const router = inject(Router);
@@ -73,7 +78,10 @@ export const routes: Routes = [
           { path: '', redirectTo: 'visual-overview', pathMatch: 'full'},
           { path: 'inventory', component: InventoryComponent },
           { path: 'visual-overview', component: WarehouseMapComponent },
-          { path: 'visual-overview/alley/:id', component: AlleyOverviewComponent}
+          { path: 'visual-overview/alley/:id', component: AlleyOverviewComponent },
+          { path: 'remains', component: WarehouseRemainsComponent },
+          { path: 'pallet-binding', component: PalletBindingMainComponent },
+          { path: 'pallet-binding/:documentId', component: PalletBindingComponent }
         ]
       },
 
@@ -86,25 +94,12 @@ export const routes: Routes = [
           { path: 'contracts/details/:id', component: ContractDetailsPageComponent },
           { path: 'documents', component: DocumentManagementComponent },
           { path: 'documents/new', component: DocumentCreateComponent },
+          { path: 'payments', component: PaymentsPageComponent},
+          { path: 'payments/add-bill', component: BillPageComponent}
         ]
       }
     ]
   },
-
-  // 3. АДМІНСЬКА ОБОЛОНКА (Окрема робоча зона)
-  // {
-  //   path: 'admin',
-  //   component: AdminLayoutComponent, // Містить адмінський сайдбар/меню
-  //   canActivate: [authGuard, adminGuard],        // Сюди потім можна додати adminGuard
-  //   children: [
-  //     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  //     { path: 'users', component: AdminUserManagementComponent },
-  //     { path: 'warehouse-settings', component: WarehouseSettingsComponent },
-  //     { path: 'pallet-types', component: PalletTypesComponent }
-  //   ]
-  // },
-
-  // 4. ПЕРЕНАПРАВЛЕННЯ (Якщо ввели неіснуючий URL)
   { 
     path: '**', 
     redirectTo: '/dashboard' 

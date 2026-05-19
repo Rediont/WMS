@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ClientObject } from './models/client.model'; // Ваш шлях до моделі
+import { Client } from './models/client.model'; // Ваш шлях до моделі
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -15,22 +15,22 @@ export class ClientService {
 
   constructor() { }
 
-  getClients(page: number = 0): Observable<ClientObject[]> {
+  getClients(page: number = 0): Observable<Client[]> {
     const params = new HttpParams().set('page', page);
 
-    return this.http.get<ClientObject[]>(`${this.apiUrl}/all`, { params });
+    return this.http.get<Client[]>(`${this.apiUrl}/all`, { params });
   }
 
-  getClientById(id: number): Observable<ClientObject> {
-    return this.http.get<ClientObject>(`${this.apiUrl}/${id}`);
+  getClientById(id: number): Observable<Client> {
+    return this.http.get<Client>(`${this.apiUrl}/${id}`);
   }
 
-  addClient(newClient: Omit<ClientObject, 'id'>): Observable<ClientObject> {
-    return this.http.post<ClientObject>(`${this.apiUrl}/add`, newClient);
+  addClient(newClient: Omit<Client, 'id'>): Observable<Client> {
+    return this.http.post<Client>(`${this.apiUrl}/add`, newClient);
   }
 
-  updateClient(id: number, updatedData: Partial<ClientObject>): Observable<ClientObject> {
-    return this.http.put<ClientObject>(`${this.apiUrl}/${id}`, updatedData);
+  updateClient(id: number, updatedData: Partial<Client>): Observable<Client> {
+    return this.http.put<Client>(`${this.apiUrl}/${id}`, updatedData);
   }
 
   deleteClient(id: number): Observable<void> {
