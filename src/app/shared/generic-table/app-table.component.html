@@ -3,11 +3,13 @@
     <thead>
       <tr>
         <th class="checkbox-cell">
+          @if(showCheckbox) {
           <input 
             type="checkbox" 
             [checked]="isAllSelected()"
             [disabled]="data.length === 0"
             (change)="toggleAll($event)">
+          }
         </th>
 
         <th *ngFor="let col of columns">
@@ -20,10 +22,10 @@
           (click)="rowClicked.emit(row)" 
           style="cursor: pointer"
           [class.selected-row]="isSelected(row)"> <td class="checkbox-cell" (click)="$event.stopPropagation()">
-          <input 
-            type="checkbox"
-            [checked]="isSelected(row)"
-            (change)="toggleRow(row, $event)">
+            
+          @if (showCheckbox) {
+            <input type="checkbox" [checked]="isAllSelected()" (change)="toggleAll($event)">
+          }
         </td>
 
         <td *ngFor="let col of columns">

@@ -7,7 +7,7 @@ import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatNativeDateModule, MatOption } from "@angular/material/core";
 import { MatSelectModule } from '@angular/material/select';
 import { Location } from '@angular/common';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
@@ -21,7 +21,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatSelectModule, 
     ReactiveFormsModule, 
     MatInputModule,
-    MatButton,
+    MatButtonModule,
     MatDatepickerModule,
     MatNativeDateModule],
   templateUrl: './document-create.component.html',

@@ -7,11 +7,12 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AppStateService } from './core/state.service/state.service';
 import { of } from 'rxjs';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { tokenInterceptor } from './core/interceptors/token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   // providers: [provideRouter(routes, withDebugTracing())]
   providers: [provideRouter(routes), provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, tokenInterceptor])),
     provideAppInitializer(() => {
       const appState = inject(AppStateService);
       

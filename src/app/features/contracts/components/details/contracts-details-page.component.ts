@@ -3,10 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContractService } from '../../contract.service';
 import { DetailsConfig } from '../../../../shared/dynamic-details/models/detail-config.model';
 import { DynamicDetailsComponent } from '../../../../shared/dynamic-details/dynamic-details/dynamic-details.component';
+import { GenericTableComponent } from "../../../../shared/generic-table/app-table.component";
+import { TableColumn } from '../../../../shared/generic-table/table-config.model';
 
 @Component({
   selector: 'app-contract-details-page',
-  imports: [DynamicDetailsComponent],
+  imports: [DynamicDetailsComponent, GenericTableComponent],
   template: `
     @if (isLoading) {
     <div>Завантаження...</div>
@@ -14,12 +16,18 @@ import { DynamicDetailsComponent } from '../../../../shared/dynamic-details/dyna
     <app-dynamic-details 
         [config]="contractDetailsConfig" 
         [data]="contractData"
-        [extraData]="inboundsList"
+        [extraData]="documentList"
         (actionClicked)="handleAction($event)">
         
-        <div class="extra-section">
-        <h3>Прибуття за цим контрактом</h3>
-        </div>
+      <div class="extra-section" style="margin-top: 20px;">
+        <h3>Документи за цим контрактом</h3>
+        
+        <app-table 
+          [data]="documentList" 
+          [columns]="documentColumns" 
+          rowIdKey="id">
+        </app-table>
+      </div>
 
     </app-dynamic-details>
     }
@@ -32,16 +40,16 @@ export class ContractDetailsPageComponent implements OnInit {
 
   isLoading = true;
   contractData: any;
-  inboundsList: any[] = []; // Ті самі додаткові дані
+  documentList: any[] = [];
 
   // КОНФІГУРАЦІЯ ДЛЯ КОНТРАКТУ
   contractDetailsConfig: DetailsConfig = {
     title: 'Картка Контракту',
     fields: [
       { key: 'id', label: 'ID Контракту' },
-      { key: 'name', label: 'Назва' },
+      { key: 'contractName', label: 'Назва' },
       { key: 'startDate', label: 'Дата початку', type: 'date' },
-      { key: 'statusDisplay', label: 'Статус', type: 'badge' }
+      { key: 'currentStatus', label: 'Статус', type: 'badge' }
     ],
     actions: [
       { actionId: 'edit', label: 'Редагувати', color: 'accent' },
@@ -50,34 +58,66 @@ export class ContractDetailsPageComponent implements OnInit {
     ]
   };
 
+  documentColumns: TableColumn[] = [
+    { key: 'id', label: 'ID' },
+    { key: 'documentType', label: 'Тип' }, 
+    { key: 'creationDate', label: 'Дата створення' }
+  ];
+
   ngOnInit() {
-    // 1. Беремо ID з URL
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.loadFullContractInfo(Number(id));
     }
   }
 
-  // 2. ВАНТАЖИМО БАГАТО ДАНИХ (саме те, що ти просив)
+  mapContractStatus(status: number | string): string {
+    const statusMap: Record<string, string> = {
+      '0': 'Неактивний',
+      '1': 'Активний',
+      '2': 'Розірваний',
+      '3': 'Завершений',
+      '4': 'Недійсний',
+      'Inactive': 'Неактивний',
+      'Active': 'Активний',
+      'Terminated': 'Розірваний',
+      'Completed': 'Завершений',
+      'Invalid': 'Недійсний'
+    };
+
+    // Перетворюємо вхідне значення на рядок і шукаємо в словнику
+    return statusMap[status?.toString()] || 'Невідомий статус';
+  }
+
   loadFullContractInfo(id: number) {
     this.isLoading = true;
     
-    // Тут можна використати forkJoin, щоб завантажити контракт і додаткові дані паралельно
-    this.contractService.getContractById(id).subscribe(contract => {
-      this.contractData = contract;
-      
-    //   this.contractService.getInboundsForContract(id).subscribe(inbounds => {
-    //     this.inboundsList = inbounds;
-    //     this.isLoading = false;
-    //   });
+    this.contractService.getContractDetails(id).subscribe({
+      next: (data) => {
+        console.log('Отримані деталі контракту:', data);
+        this.contractData = {
+          id: data.id,
+          contractName: data.contractName,
+          startDate: data.startDate,
+          currentStatus: this.mapContractStatus(data.currentStatus),
+          clientName: data.clientName,
+        };
+
+        this.documentList = data.documents; 
+        
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Помилка завантаження контракту', err);
+        this.isLoading = false;
+      }
     });
   }
 
-  // 3. Обробляємо кліки по кнопках
   handleAction(actionId: string) {
     switch (actionId) {
       case 'back':
-        this.router.navigate(['/contracts']);
+        this.router.navigate(['workflow/contracts']);
         break;
       case 'edit':
         // Відкрити діалог редагування

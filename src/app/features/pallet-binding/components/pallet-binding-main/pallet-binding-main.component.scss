@@ -6,12 +6,12 @@
   .page-header {
     p {
       color: #fff;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     h2 {
       color: #fff;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 500;   
       display: flex;
       align-items: center;
@@ -24,19 +24,19 @@
   flex-grow: 1; 
   min-height: 360px;     // Змушуємо блок зайняти все вільне місце
   max-height: 450px; // Обмеження за твоєю логікою
-  background-color: #808080;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  background: var(--bg-table);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
 }
 
 
 
-app-table {
-//   display: block;   
+app-table {  
+  flex-grow: 1;
   width: 100%;
-//   max-height: 100%; 
+  height: 100%;
   overflow-y: auto;  // Скрол оживає завдяки flex-grow батька
   position: relative; // Щоб працювали зафіксовані (sticky) заголовки
 }

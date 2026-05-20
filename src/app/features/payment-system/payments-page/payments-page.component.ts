@@ -5,6 +5,9 @@ import { FilterField } from '../../../shared/generic-filter/model/generic-filter
 import { TableColumn } from '../../../shared/generic-table/table-config.model';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { AppStateService } from '../../../core/state.service/state.service';
+import { BillRecordDto } from '../models/bill.model';
+import { PaymentService } from '../payment.service';
 
 @Component({
   selector: 'app-payments-page',
@@ -14,6 +17,8 @@ import { Router } from '@angular/router';
 })
 export class PaymentsPageComponent {
   private router = inject(Router);
+  private stateService = inject(AppStateService);
+  private paymentService = inject(PaymentService);
 
   currentPage : number = 0;
   totalPages : number = 0;
@@ -21,10 +26,11 @@ export class PaymentsPageComponent {
 
   paymentColumns: TableColumn[] = [
     { key: 'index', label: '№' },
-    { key: 'paymentId', label: 'Id Платежу' },
+    { key: 'id', label: 'Id Платежу' },
     { key: 'clientName', label: 'Клієнт' },
     { key: 'contractName', label: 'Контракт' },
-    { key: 'statusDisplay', label: 'Status' }
+    { key: 'isPaid', label: 'Status' },
+    { key: 'total', label: 'Сума' },
   ];
 
   paymentFilterConfig: FilterField[] = [
@@ -56,9 +62,38 @@ export class PaymentsPageComponent {
     }
   ];
 
-  paymentItems: [] = [];
+  paymentItems: BillRecordDto[] = [];
 
   rowIdKeyForPayments = 'id';
+
+  ngOnInit() {
+    const clientOptions = this.stateService.lookups.clients.map(client => ({ value: client.id, display: client.name }));
+    const clientFilter = this.paymentFilterConfig.find(f => f.key === 'clientId');
+    if (clientFilter) {
+      clientFilter.options = clientOptions;
+    }
+
+    const contractOptions = this.stateService.lookups.contracts.map(contract => ({ value: contract.id, display: contract.contractName }));
+    const contractFilter = this.paymentFilterConfig.find(f => f.key === 'contractId');
+    if (contractFilter) {
+      contractFilter.options = contractOptions;
+    }
+
+    this.loadPayments(this.currentPage);
+  }
+
+  loadPayments(page: number) {
+    this.paymentService.loadPayments(page).subscribe({
+      next: (response: BillRecordDto[]) => {
+        console.log('Payments loaded:', response);
+        this.paymentItems = response;
+      },
+      error: (err) => {
+        console.error('Помилка завантаження платежів:', err);
+      }
+    });
+
+  }
 
   openAddPaymentDocumentDialog() {
     // Перенаправляємо користувача на сторінку додавання
@@ -67,10 +102,8 @@ export class PaymentsPageComponent {
 
   applyFilter(event: any) {
   }
-
     onItemSelected(item: any) {
     console.log('Selected contract:', item);
-    // this.router.navigate(['/contracts/details', item.contractId])
   }
 
   onSelectionChange(selectedItems: any[]) {

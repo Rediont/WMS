@@ -55,4 +55,8 @@ export class ContractService {
     let params = new HttpParams();
     return this.http.get<number>(`${this.apiUrl}/total-pages`, { params });
   }
+
+  getContractDetails(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}/details`);
+  }
 }

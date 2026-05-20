@@ -22,7 +22,8 @@
                 [data]="paymentItems" 
                 [rowIdKey]="rowIdKeyForPayments"
                 (rowClicked)="onItemSelected($event)"
-                (selectionChanged)="onSelectionChange($event)">
+                (selectionChanged)="onSelectionChange($event)"
+                [showCheckbox]="false">
             </app-table>
         </div>
 

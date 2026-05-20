@@ -31,13 +31,14 @@ export class DocumentManagementComponent {
 
   documentColumns: TableColumn[] = [
     { key: 'index', label: '№' },
+    { key: 'id', label: 'ID документа' },
     { key: 'type', label: 'Тип документа' },
     { key: 'clientName', label: 'Клієнт' },
     { key: 'contractName', label: 'Контракт' },
     { key: 'creationDate', label: 'Дата створення' }
   ];
 
-  rowIdKeyForDocuments = 'index';
+  rowIdKeyForDocuments = 'id';
 
   documentFilterConfig: FilterField[] = [
     { key: 'documentTypeId', label: 'Тип документа', type: 'select', options: [] },

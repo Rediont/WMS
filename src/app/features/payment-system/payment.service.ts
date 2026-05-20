@@ -2,7 +2,8 @@ import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { BillDto } from "../../core/models/payment.interfaces";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
+import { BillRecordDto } from "./models/bill.model";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,11 @@ export class PaymentService {
   private apiUrl = `${environment.apiUrl}/payment`;
 
   constructor(http: HttpClient) {}
+
+  loadPayments(page: number): Observable<BillRecordDto[]> {
+    const params = new HttpParams().set('page', page.toString());
+    return this.http.get<BillRecordDto[]>(`${this.apiUrl}/all`, { params });
+  }
 
   CalculateContractBillForClient(
     clientId: number, 

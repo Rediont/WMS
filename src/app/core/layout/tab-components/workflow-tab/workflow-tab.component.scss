@@ -2,6 +2,11 @@
 .tab-wrapper {
     display: flex;
     flex-direction: column;
+    height: 100%;       
+    min-height: 0;   
+    max-height: 540px;  
+    border-radius: 8px; 
+    overflow: hidden;   
 }
 
 .tab-actions {
@@ -15,7 +20,30 @@
 .tab-content {
     display: flex;
     flex-direction: column;
-    flex-grow: 4;
+    flex-grow: 1;      
+    min-height: 0;       
+    overflow: auto;    
+    // border-radius: 8px;
+
+
+  &::-webkit-scrollbar {
+    width: 8px;      
+    height: 8px;     
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--bg-main);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #444;   
+    border-radius: 4px;        
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #666;    
+  }
 }
 
 a {
@@ -23,7 +51,7 @@ a {
   align-items: center;
   justify-content: center;
   height: 30px; 
-  background-color: rgb(35, 35, 35);
+  background-color: var(--bg-header);
   color: white;
   text-decoration: none;
   border-radius: 5px;

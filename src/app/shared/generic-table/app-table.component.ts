@@ -13,6 +13,7 @@ export class GenericTableComponent {
   @Input({ required: true }) data: any[] = [];
   @Input({ required: true }) columns: TableColumn[] = [];
   @Input({ required: true }) rowIdKey!: string; 
+  @Input() showCheckbox: boolean = true;
 
   @Output() rowClicked = new EventEmitter<any>();
   @Output() selectionChanged = new EventEmitter<any[]>();
@@ -42,8 +43,7 @@ export class GenericTableComponent {
 
   // Чи вибрані ВСІ рядки на поточній сторінці?
   isAllSelected(): boolean {
-    if (this.data.length === 0) return false;
-    return this.data.every(row => this.selectedIds.has(row[this.rowIdKey]));
+    return this.data?.length > 0 && this.data.every(row => this.selectedIds.has(row[this.rowIdKey]));
   }
 
   // Перемикання одного рядка

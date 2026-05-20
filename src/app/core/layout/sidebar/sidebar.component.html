@@ -3,11 +3,10 @@
         <li><a href="#">Головна</a></li>
         <li><a href="/warehouse">Керування складом</a></li>
         <li><a href="/workflow">Документообіг</a></li>
-        <!-- <li><a href="#">Налаштування</a></li> -->
         @if(isAdmin()){
             <li><a href="/admin">Адмін панель</a></li>
         }
-        <li><a href="#">Вийти</a></li>
+        <li><a (click)="logout()">Вийти</a></li>
     </ul>
 </div>
 

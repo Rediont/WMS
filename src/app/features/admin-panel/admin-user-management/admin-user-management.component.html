@@ -3,11 +3,23 @@
 </div>
 <div class="container">
     <div class="user-management-actions">
-        <button mat-raised-button color="primary">Додати</button>
-        <button mat-raised-button color="accent">Змінити</button>
-        <button mat-raised-button color="warn">Видалити</button>
+        <button mat-raised-button color="primary" (click)="onAddUser()">Додати</button>
+        
+        <button mat-raised-button color="accent" [disabled]="!selectedUser()" (click)="onEditUser()">Змінити</button>
+        <button mat-raised-button color="warn" [disabled]="!selectedUser()" (click)="onDeleteUser()">Видалити</button>
     </div>
+
+    @if (selectedUser()) {
+       <div style="color: white; margin-top: -10px;">
+           Обрано: <strong>{{ selectedUser().name }}</strong>
+       </div>
+    }
+
     <div class="user-management-list">
-        <app-table [data]="users" [columns]="userManagementColumns" [rowIdKey]="rowIdKeyForUsers"></app-table>
+        <app-table 
+            [data]="users" 
+            [columns]="userManagementColumns" 
+            [rowIdKey]="rowIdKeyForUsers"
+            (rowClick)="onRowSelect($event)"> </app-table>
     </div>
 </div>

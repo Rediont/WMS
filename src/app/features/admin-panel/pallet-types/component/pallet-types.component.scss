@@ -21,7 +21,8 @@
 .pallet-types-list {
   flex-grow: 1;
   border-radius: 5px;
-  background: gray;
+  background: var(--bg-table);
+  border: 1px solid var(--border-color);
   overflow: hidden;
   min-height: 340px;
   display: flex;
@@ -36,5 +37,5 @@
 h2 {
   margin-top: 0;
   margin-bottom: 10px;
-  color: white;
+  color: var(--text-main);
 }

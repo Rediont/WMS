@@ -73,7 +73,7 @@ export class ContractsComponent {
 
   contractItems: Contract[] = [];
 
-  rowIdKeyForContracts = 'id';
+  rowIdKeyForContracts = 'contractId';
   
   contractFormConfig: FormConfig = {
     title: 'Додати новий контракт',
@@ -300,7 +300,7 @@ export class ContractsComponent {
 
   onItemSelected(item: any) {
     console.log('Selected contract:', item);
-    this.router.navigate(['/contracts/details', item.contractId])
+    this.router.navigate(['/workflow/contracts/details', item.contractId])
   }
 
   onSelectionChange(selectedItems: any[]) {

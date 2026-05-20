@@ -6,6 +6,7 @@
   max-height: 440px;
   gap: 20px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* Ліва колонка (Сайдбар) */
@@ -50,7 +51,8 @@ h2 {
   align-items: center;
   gap: 10px;
   margin-top: 10px;
-  background: #fff;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 5px;
 }
 
@@ -60,7 +62,7 @@ h2 {
   border-radius: 8px;
   background-color: #f5f5f5; /* Світло-сірий фон для контрасту з таблицею */
   border: 1px solid #444;
-  overflow: hidden;
+  // overflow: hidden;
   
   display: flex;
   flex-direction: column;

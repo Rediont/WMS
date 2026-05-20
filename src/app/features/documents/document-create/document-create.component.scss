@@ -1,8 +1,8 @@
 .create-doc-page {
   padding: 20px;
   margin: 0 ; // Центруємо на екрані
-  background: #fff;
-  border-radius: 5px;
+  background: var(--bg-card);
+  border-radius: 6px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
@@ -14,7 +14,7 @@
   
   h2 {
     margin: 0;
-    color: #fff;
+    color: var(--text-main);
   }
 }
 
@@ -25,8 +25,8 @@
 }
 
 .section {
-  background: #e2e2e2;
-  border: 1px solid #444;
+  background: var(--bg-table);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 20px;
 
@@ -34,7 +34,7 @@
     margin-top: 0;
     margin-bottom: 16px;
     // color: #fff;
-    border-bottom: 1px solid #444;
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 8px;
   }
 }
@@ -55,7 +55,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-  border-bottom: 1px solid #444;
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 8px;
 
   h3 {
@@ -75,15 +75,15 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
+  background-color: var(--bg-document-create);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 16px;
   margin-bottom: 12px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 
   .row-number {
-    color: #bbb;
+    color: var(--text-muted);
     font-weight: bold;
     width: 24px;
   }
@@ -103,7 +103,7 @@
 
 .empty-state {
   text-align: center;
-  color: #888;
+  color: var(--text-muted);
   padding: 20px;
   font-style: italic;
 }

@@ -16,7 +16,8 @@
         [data]="warehouseRemainsItems" 
         [rowIdKey]="rowIdKeyForWarehouseRemains"
         (rowClicked)="onItemSelected($event)"
-        (selectionChanged)="onSelectionChange($event)"></app-table>
+        (selectionChanged)="onSelectionChange($event)"
+        [showCheckbox]="false"></app-table>
     </div>
 
     <div class="page-buttons">

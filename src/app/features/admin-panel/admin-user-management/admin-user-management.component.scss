@@ -14,13 +14,13 @@
 
 .user-management-list {
   height: 340px;
-  // border: 0px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
-  background-color: gray;
+  background-color: var(--bg-table);
 }
 
 h2 {
   margin-top: 0;
   margin-bottom: 10px;
-  color: white;
+  color: var(--text-main);
 }
