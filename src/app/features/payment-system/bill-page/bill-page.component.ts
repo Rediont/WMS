@@ -46,7 +46,6 @@ export class BillPageComponent {
   
 
 
-  // Фільтри (початковий стан)
   filters = {
     clientId: null as number | null,
     contractId: null as number | null,
@@ -61,7 +60,6 @@ export class BillPageComponent {
     return this.allContracts().filter(c => c.clientId === selectedClientId);
   });
 
-  // Конфігурація колонок для вашої generic-table
   tableColumns : TableColumn[] = [
     { key: 'palletTypeId', label: 'ID Типу' },
     { key: 'palletTypeName', label: 'Тип палети' }, // Бажано додати назву в BillItem

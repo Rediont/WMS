@@ -13,3 +13,6 @@ export interface ApiContractObject {
     StartDate: string; 
     EndDate: string;
 }
+
+export interface FilteredContract extends Contract {
+}

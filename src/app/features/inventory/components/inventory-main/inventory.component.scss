@@ -8,6 +8,13 @@
   box-sizing: border-box;
 }
 
+.inventory-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0; 
+  gap: 5px;
+}
 
 .inventory-container {
   display: flex;
@@ -40,9 +47,20 @@ h2{
 }
 
 .inventory-list {
-  height: 350px;
+  height: 340px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
+}
+
+.document-page-navigation {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
 }
 
 app-generic-filter {

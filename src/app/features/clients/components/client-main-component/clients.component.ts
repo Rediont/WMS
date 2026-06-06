@@ -29,12 +29,11 @@ export class ClientsComponent {
   selectedClientIds: number[] = [];
 
   clientColumns: TableColumn[] = [
-    { key: 'index', label: '№' },
-    { key: 'id', label: 'Client ID' },
-    { key: 'name', label: 'Name' },
-    { key: 'contactPersonName', label: 'Contact Person' },
-    { key: 'contactPersonPhone', label: 'Phone Number'},
-    { key: 'email', label: 'Email'}
+    { key: 'id', label: 'ID клієнта' },
+    { key: 'name', label: 'Назва' },
+    { key: 'contactPersonName', label: 'Контактна особа' },
+    { key: 'contactPersonPhone', label: 'Номер телефону'},
+    { key: 'email', label: 'Пошта'}
   ];
 
   rowIdKeyForClients = 'id';
@@ -103,34 +102,28 @@ export class ClientsComponent {
   }
 
   goToContracts() {
-    // Якщо ніхто не вибраний, просто переходимо
     if (this.selectedClientIds.length === 0) {
       this.router.navigate(['/contracts']);
       return;
     }
 
-    // Передаємо масив ID як кому-розділений рядок (query param)
     this.router.navigate(['/contracts'], { 
       queryParams: { clients: this.selectedClientIds.join(',') } 
     });
-    // URL буде виглядати так: /contracts?clients=1,5,12
   }
 
-      openAddDialog() {
-    // Відкриваємо нашу НОВУ універсальну обгортку для діалогів
+  openAddDialog() {
     const dialogRef = this.dialog.open(DynamicFormDialogComponent, {
       width: '500px',
-      data: this.clientFormConfig, // Передаємо конфігурацію як data
+      data: this.clientFormConfig,
       disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((result: Client | null) => {
-      // Якщо користувач натиснув "Зберегти" (результат є)
       if (result) {
         console.log('Creating new client:', result);
         this.clientService.addClient(result).subscribe({
           next: (createdClient) => {
-            // Оновлюємо таблицю (створюємо новий масив, щоб Angular помітив зміни)
             this.clientItems = [...this.clientItems, createdClient];
             console.log('Client created successfully:', createdClient);
           }

@@ -48,7 +48,6 @@ export class PalletBindingComponent implements OnInit {
 
   selectedPalletForBinding = signal<PalletAssignmentDto | null>(null);
 
-  // 1. РОЗУМНИЙ COMPUTED СИГНАЛ: Рахує розмір палети тільки тоді, коли реально змінюється виділення
   selectedPalletSize = computed(() => {
     const pallet = this.selectedPalletForBinding();
     if (!pallet) return 0;
@@ -60,7 +59,6 @@ export class PalletBindingComponent implements OnInit {
     return foundType ? (foundType.size || 1) : 1;
   });
 
-  // 2. КЕШОВАНИЙ COMPUTED СЛОВНИК: Позбавляє шаблони від постійних пошуків у масиві документів
   currentDocActivePallets = computed(() => {
     const docId = this.selectedDocumentId();
     if (!docId) return null;
@@ -74,7 +72,6 @@ export class PalletBindingComponent implements OnInit {
   ngOnInit() {
     this.loadInitialData();
     
-    // Перевіряємо, чи ми перейшли сюди з таблиці приходів з ID в URL
     const docIdParam = this.route.snapshot.paramMap.get('documentId');
     if (docIdParam) {
       this.onDocumentChange(+docIdParam);
@@ -92,6 +89,12 @@ export class PalletBindingComponent implements OnInit {
     return counts ? (counts[typeId] || 0) : 0;
   }
 
+  getPalletSizeByTypeId(typeId: number): number {
+    const typesList = this.stateService.lookups.palletTypes || [];
+    const foundType = typesList.find(t => Number(t.id) === Number(typeId));
+    return foundType ? (foundType.size || 1) : 1;
+  }
+
   loadInitialData() {
     this.warehouseService.getAllAlleysOccupancy().subscribe(occupancies => {
       const count = occupancies.length;
@@ -100,7 +103,7 @@ export class PalletBindingComponent implements OnInit {
       for (let i = 1; i <= count; i++) {
         Alleys.push({
           id: i,
-          name: `Alley ${i}`,
+          name: `Алея ${i}`,
           occupancy: occupancies.find(o => o.alleyId === i)?.occupancyPercentage || 0,
           cells: []
         });
@@ -133,6 +136,61 @@ export class PalletBindingComponent implements OnInit {
         next: (map) => this.alleyFloorMap.set(map),
         error: (err) => console.error('Помилка відновлення карти алеї:', err)
       });
+    }
+  }
+
+  autoBindPallets() {
+    const currentPallets = this.unboundPallets();
+    if (currentPallets.length === 0) {
+      alert('Немає палет для автоматичного розміщення.');
+      return;
+    }
+
+    const currentMap = [...this.alleyFloorMap()];
+    const remainingPallets: PalletAssignmentDto[] = [];
+    let hasChanges = false;
+
+
+    for (const pallet of currentPallets) {
+      const neededSpace = this.getPalletSizeByTypeId(pallet.palletTypeId);
+      let placed = false;
+
+
+      for (const floor of currentMap) {
+        if (placed) break; 
+
+        for (const cell of floor.cellOccupancies) {
+          if (cell.freeCapacity >= neededSpace) {
+            cell.freeCapacity -= neededSpace; 
+
+            if (!this.localBindingChanges[cell.cellIndex]) {
+              this.localBindingChanges[cell.cellIndex] = [];
+            }
+            this.localBindingChanges[cell.cellIndex].push(pallet.palletId);
+
+            placed = true;
+            hasChanges = true;
+            break;
+          }
+        }
+      }
+      if (!placed) {
+        remainingPallets.push(pallet);
+      }
+    }
+
+
+    if (hasChanges) {
+      this.unboundPallets.set(remainingPallets);
+      this.alleyFloorMap.set(currentMap);
+
+      if (remainingPallets.length > 0) {
+        alert(`Увага: Не вистачило місця в алеї для ${remainingPallets.length} палет.`);
+      } else {
+        console.log('Всі палети успішно розподілені!');
+      }
+    } else {
+      alert('Немає вільного місця в поточній алеї для цих палет.');
     }
   }
 

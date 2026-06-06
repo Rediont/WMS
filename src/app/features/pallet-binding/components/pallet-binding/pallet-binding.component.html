@@ -36,7 +36,16 @@
       
     </div>
 
+
     <div class="header-actions">
+      <button 
+        mat-raised-button 
+        color="accent" 
+        (click)="autoBindPallets()"
+        [disabled]="unboundPallets().length === 0 || !selectedAlleyId()">
+        <mat-icon>auto_awesome</mat-icon>
+        Авторозподіл
+      </button>
       <button mat-raised-button color="primary" [disabled]="!canSaveBatch()" (click)="saveBindingBatch()">
         <mat-icon>save</mat-icon> Зберегти пакет прив'язок
       </button>

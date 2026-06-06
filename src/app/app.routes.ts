@@ -54,7 +54,6 @@ export const routes: Routes = [
     canActivate: [authGuard],       // Захищає ВСІ маршрути всередині children
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'clients', component: ClientsComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'history', component: DashboardComponent },
 
@@ -90,6 +89,7 @@ export const routes: Routes = [
         component: WorkflowTabComponent,
         children: [
           { path: '', redirectTo: 'contracts', pathMatch: 'full'},
+          { path: 'clients', component: ClientsComponent },
           { path: 'contracts', component: ContractsComponent },
           { path: 'contracts/details/:id', component: ContractDetailsPageComponent },
           { path: 'documents', component: DocumentManagementComponent },

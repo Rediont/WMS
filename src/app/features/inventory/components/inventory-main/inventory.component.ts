@@ -3,10 +3,18 @@ import { TableColumn } from "../../../../shared/generic-table/table-config.model
 import { GenericTableComponent } from '../../../../shared/generic-table/app-table.component';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { InventoryItem } from '../../models/inventory-item.model';
+import { PalletInfo } from '../../models/inventory-item.model';
 import { FilterField } from '../../../../shared/generic-filter/model/generic-filter.model';
 import { GenericFilterComponent } from "../../../../shared/generic-filter/component/generic-filter.component";
 import { AppStateService } from '../../../../core/state.service/state.service';
+import { InventoryService } from '../../inventory.service';
+
+const PalletStatusMap: Record<number, string> = {
+  0: 'Прибула',       // Arrived
+  1: 'Розподілена',   // Arranged
+  2: 'На зберіганні', // Stored
+  3: 'Відвантажена'   // Shipped
+};
 
 @Component({
     selector: 'app-inventory',
@@ -17,8 +25,9 @@ import { AppStateService } from '../../../../core/state.service/state.service';
 export class InventoryComponent {
   @ViewChild(GenericTableComponent) table!: GenericTableComponent;
 
-  private appState = inject(AppStateService);
+  private stateService = inject(AppStateService);
   private dialog = inject(MatDialog);
+  private inventoryService = inject(InventoryService);
 
   inventoryFilterConfig: FilterField[] = [
     { 
@@ -41,25 +50,28 @@ export class InventoryComponent {
     }
   ];
 
-  // Наші дані
-  inventoryItems: InventoryItem[] = [
-  ];
+  inventoryItems: PalletInfo[] = [];
 
-  // Конфігурація колонок САМЕ для інвентарю
   inventoryColumns: TableColumn[] = [
     { key: 'index', label: '№' },
-    { key: 'id', label: 'Pallet ID' },
-    { key: 'name', label: 'Name' },
-    { key: 'alley', label: 'Alley Location' },
-    { key: 'type', label: 'Pallet Type' }
+    { key: 'arrivalDocumentId', label: 'ID Документу приходу' },
+    { key: 'alleyIndex', label: 'Номер алеї' },
+    { key: 'cellIndex', label: 'Номер Комірки' },
+    { key: 'palletTypeName', label: 'Тип палети' },
+    { key: 'palletStatusName', label: 'Статус' }
   ];
 
-  rowIdKeyForInventory = 'id';
+  rowIdKeyForInventory = 'palletId';
 
   selectedInventoryItems: any[] = [];
   
+  currentPage: number = 0;
+  totalPages: number = 0;
+
   ngOnInit() {
+    this.loadTotalPages();
     this.populateFiltersFromLookups();
+    this.loadInventoryItems(0);
   }
 
   onItemSelected(item: any) {
@@ -71,32 +83,52 @@ export class InventoryComponent {
     this.selectedInventoryItems = selectedItems;
   }
 
-  private populateFiltersFromLookups() {
-    // Отримуємо словники (якщо вони ще не завантажились, беремо порожні масиви як fallback)
-    const lookups = this.appState.lookups;
+  private loadTotalPages() {
+    this.inventoryService.getTotalPages().subscribe(total => {
+      this.totalPages = total;
+    }); 
+  }
 
-    // 1. Мапимо LookupItem для Типів палет
+  private loadInventoryItems(page: number) {
+    this.inventoryService.getInventoryItems(page).subscribe((items: PalletInfo[]) => {
+      
+      this.inventoryItems = items.map((item, index) => {
+        
+        const matchedType = this.stateService.lookups.palletTypes.find(
+          pt => pt.id === item.palletTypeId
+        );
+
+        return {
+          ...item,
+          index: 20 * page + index + 1,
+          cellIndex: item.cellIndex !== null ? item.cellIndex : 0,
+          alleyIndex: item.alleyIndex !== null ? item.alleyIndex : 0,
+          palletTypeName: matchedType ? matchedType.name : 'Невідомий тип', 
+          palletStatusName: PalletStatusMap[item.palletStatus] || 'Невідомий статус'
+        };
+      });
+    });
+  }
+
+  private populateFiltersFromLookups() {
+    const lookups = this.stateService.lookups;
+
     const palletTypeOptions = (lookups.palletTypes || []).map(pt => ({
       value: pt.id,
       display: pt.name
     }));
 
-    // 2. Мапимо LookupItem для Клієнтів
     const clientOptions = (lookups.clients || []).map(client => ({
       value: client.id,
       display: client.name
     }));
 
-    // 3. Мапимо ContractLookupItem для Контрактів
-    // Використовуємо .contractName як текст (display)
+
     const contractOptions = (lookups.contracts || []).map(contract => ({
       value: contract.id,
-      // Можна зробити ще красивіше: 'Назва контракту (Клієнт)'
-      // display: `${contract.contractName} (${contract.clientName})`
       display: contract.contractName 
     }));
 
-    // 4. Оновлюємо конфігурацію (обов'язково через .map(), щоб Angular оновив UI)
     this.inventoryFilterConfig = this.inventoryFilterConfig.map(field => {
       switch (field.key) {
         case 'palletTypeId':
@@ -111,8 +143,21 @@ export class InventoryComponent {
     });
   }
 
-
   applyFilter(filterValues: any) {
     console.log('Applying filter with values:', filterValues);
+  }
+
+  goToPreviousPage() {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadInventoryItems(this.currentPage);
+    }
+  }
+
+  goToNextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadInventoryItems(this.currentPage);
+    }
   }
 }

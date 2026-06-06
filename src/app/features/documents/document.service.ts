@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable, Subject } from "rxjs";
-import { DocumentObject } from "./model/document.model";
+import { DocumentObject, WeeklyDocumentStatsDto } from "./model/document.model";
 import { map } from "rxjs";
 import { formatDate } from "@angular/common";
 
@@ -16,11 +16,11 @@ export class DocumentService {
   public documentCreated$ = new Subject<any>();
 
   public DocumentTypeNames : { [key: number]: string } = {
-    1: 'InboundReceipt',
-    2: 'OutboundShipment',
-    3: 'InventoryAdjustment',
-    4: 'TransferOrder',
-    5: 'Other'
+    1: 'Прихідна накладна',
+    2: 'Ордер на відвантаження',
+    3: 'Коригування інвентарю',
+    4: 'Замовлення передачі',
+    5: 'Інше'
   };
 
   getDocuments(page : number) {
@@ -57,4 +57,7 @@ export class DocumentService {
     return this.http.post(`${this.apiUrl}/create/shipment`, payload);
   }
     
+  getWeeklyStats() : Observable<WeeklyDocumentStatsDto> {
+    return this.http.get<WeeklyDocumentStatsDto>(`${this.apiUrl}/weekly-stats`);
+  }
 }

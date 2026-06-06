@@ -25,11 +25,10 @@ export class PaymentsPageComponent {
 
 
   paymentColumns: TableColumn[] = [
-    { key: 'index', label: '№' },
-    { key: 'id', label: 'Id Платежу' },
+    { key: 'id', label: 'ID Платежу' },
     { key: 'clientName', label: 'Клієнт' },
     { key: 'contractName', label: 'Контракт' },
-    { key: 'isPaid', label: 'Status' },
+    { key: 'isPaidText', label: 'Оплачено' },
     { key: 'total', label: 'Сума' },
   ];
 
@@ -82,17 +81,21 @@ export class PaymentsPageComponent {
     this.loadPayments(this.currentPage);
   }
 
-  loadPayments(page: number) {
+loadPayments(page: number) {
     this.paymentService.loadPayments(page).subscribe({
       next: (response: BillRecordDto[]) => {
         console.log('Payments loaded:', response);
-        this.paymentItems = response;
+        
+        // Перебираємо масив і додаємо текстове поле
+        this.paymentItems = response.map(payment => ({
+          ...payment,
+          isPaidText: payment.isPaid ? 'Так' : 'Ні' // Тернарний оператор
+        }));
       },
       error: (err) => {
         console.error('Помилка завантаження платежів:', err);
       }
     });
-
   }
 
   openAddPaymentDocumentDialog() {

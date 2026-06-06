@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { InventoryItem } from './models/inventory-item.model'; // Вкажіть ваш шлях до моделі
+import { PalletInfo } from './models/inventory-item.model'; // Вкажіть ваш шлях до моделі
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,32 +11,25 @@ export class InventoryService {
   // Інжектимо HttpClient для роботи з мережею
   private http = inject(HttpClient);
   
-  private apiUrl = 'https://my-warehouse-api.com/api/inventory'; 
+  private apiUrl = `${environment.apiUrl}/inventory`; 
 
-  constructor() { }
-
-  getInventoryItems(): Observable<InventoryItem[]> {
-    return this.http.get<InventoryItem[]>(`${this.apiUrl}`);
+  getTotalPages(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/total-pages`);
   }
 
-  /**
-   * GET: Отримати один елемент за його ID (для сторінки деталей)
-   */
-  getItemById(id: number): Observable<InventoryItem> {
-    return this.http.get<InventoryItem>(`${this.apiUrl}/${id}`);
+  getInventoryItems(page?: number): Observable<PalletInfo[]> {
+    let params = new HttpParams().set('page', page?.toString() || '0');
+    return this.http.get<PalletInfo[]>(`${this.apiUrl}/pallets/all`, { params });
   }
 
-  /**
-   * POST: Створити новий запис (додати палету)
-   * Використовуємо Omit, щоб не передавати id (його згенерує база даних)
-   */
-  addItem(newItem: Omit<InventoryItem, 'id'>): Observable<InventoryItem> {
-    return this.http.post<InventoryItem>(this.apiUrl, newItem);
+  getItemById(id: number): Observable<PalletInfo> {
+    return this.http.get<PalletInfo>(`${this.apiUrl}/${id}`);
   }
 
-  /**
-   * DELETE: Видалити запис за ID
-   */
+  addItem(newItem: Omit<PalletInfo, 'id'>): Observable<PalletInfo> {
+    return this.http.post<PalletInfo>(this.apiUrl, newItem);
+  }
+
   deleteItem(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

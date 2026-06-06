@@ -1,38 +1,135 @@
-<div class="dashboard-container">
-    <div class="subcontainer">
-        <div class="main-buttons-container">
-            <ul class="main-client-related-features">
-                <li><a href="/clients"> Клієнти </a></li>
-                <li><a href="/contracts"> Договори </a></li>
-                <li><a> Платежі </a></li>
-            </ul>
+<div class="dashboard-wrapper">
+  <div class="page-header">
+    <h1>Огляд системи</h1>
+    <p class="subtitle">Поточний стан складу та статистика</p>
+  </div>
 
-            <ul class="main-buttons-list">
-                <li><a href="/documents"> Документи </a></li>
-                <li><a href="/inventory"> Управління інвентарем </a></li>
-                <li><a>Управління секторами</a></li>
-                <li><a href="/visual-overview">Візуальний огляд</a></li>
-                <li><a> Історія руху </a></li>
-            </ul>
- 
-            <ul class="main-action-buttons-list">
-                <li><a>Розташування сховищ?</a></li>
-                <li><a>Звіти по інвентарю?</a></li>
-                <li><a>Системні налаштування</a></li>
-                <li><a>Управління користувачами?</a></li>
-            </ul>
-        </div>
+  <div class="dashboard-grid">
     
-
-
-        <div class="statistics">
-            <!-- temporary -->
-            <h2>Dashboard Statistics</h2>
-            <p>Total Clients: 150</p>
-            <p>Active Shipments: 45</p>
-            <p>Inventory Items: 1200</p>
-            <!-- temporary -->
-            <button>View Detailed Reports</button>
-        </div>
+    <div class="widget-card capacity-widget">
+      <div class="widget-header">
+        <h3>Заповненість складу</h3>
+        <span class="status-badge">Live</span>
+      </div>
+      <div class="chart-container">
+        @if (capacityChartOptions.series) {
+          <apx-chart
+            [series]="capacityChartOptions.series"
+            [chart]="capacityChartOptions.chart!"
+            [labels]="capacityChartOptions.labels!"
+            [colors]="capacityChartOptions.colors!"
+            [theme]="capacityChartOptions.theme!"
+            [stroke]="capacityChartOptions.stroke!"
+            [dataLabels]="capacityChartOptions.dataLabels!"
+            [plotOptions]="capacityChartOptions.plotOptions!"
+            [legend]="capacityChartOptions.legend!">
+          </apx-chart>
+        }
+      </div>
     </div>
+
+    <div class="widget-card throughput-widget">
+      <div class="widget-header">
+        <h3>Рух палет (Останні 7 днів)</h3>
+      </div>
+      <div class="chart-container">
+        @if (throughputChartOptions.series) {
+          <apx-chart
+            [series]="throughputChartOptions.series"
+            [chart]="throughputChartOptions.chart!"
+            [xaxis]="throughputChartOptions.xaxis!"
+            [yaxis]="throughputChartOptions.yaxis!"
+            [colors]="throughputChartOptions.colors!"
+            [theme]="throughputChartOptions.theme!"
+            [dataLabels]="throughputChartOptions.dataLabels!"
+            [plotOptions]="throughputChartOptions.plotOptions!"
+            [grid]="throughputChartOptions.grid!"
+            [stroke]="throughputChartOptions.stroke!"
+            [fill]="throughputChartOptions.fill!"
+            [tooltip]="throughputChartOptions.tooltip!"
+            [legend]="throughputChartOptions.legend!">
+          </apx-chart>
+        }
+      </div>
+    </div>
+
+    <div class="widget-card alleys-widget">
+      <div class="widget-header">
+        <h3>Заповненість алей</h3>
+      </div>
+      
+      <div class="alleys-table-container">
+        <table class="alleys-table">
+          <thead>
+            <tr>
+              <th>Алея</th>
+              <th>Заповненість</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (alley of alleysCapacity; track alley.alleyId) {
+              <tr>
+                <td class="alley-name">Алея {{ alley.alleyId }}</td>
+                <td>
+                  <div class="progress-wrapper">
+                    <div class="progress-labels">
+                      <span class="progress-percent">{{ alley.occupancyPercentage }}%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                      <div class="progress-bar-fill" 
+                          [style.width.%]="alley.occupancyPercentage" 
+                          [ngClass]="getProgressBarColor(alley.occupancyPercentage)">
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="widget-card unpaid-widget">
+      <div class="widget-header">
+        <h3>Останні неоплачені рахунки</h3>
+      </div>
+      <div class="unpaid-list">
+        @if (unpaidBills.length > 0) {
+          @for (bill of unpaidBills; track bill.id) {
+            <div class="unpaid-item">
+              <div class="unpaid-icon">💳</div>
+              <div class="unpaid-details">
+                <span class="unpaid-client">Клієнт: {{ bill.clientName }}</span>
+                <span class="unpaid-contract">Контракт: {{ bill.contractName }}</span>
+              </div>
+              <div class="unpaid-amount">{{ bill.total }} ₴</div>
+            </div>
+          }
+        } @else {
+          <div style="text-align: center; color: var(--text-muted); padding: 20px 0;">
+            Усі рахунки оплачено! 🎉
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="widget-card stats-widget">
+      <div class="widget-header">
+        <h3>База системи</h3>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-label">Клієнти: </span>
+          <span class="stat-number"> {{ systemStats.clients }}</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Контракти: </span>
+          <span class="stat-number"> {{ systemStats.contracts }}</span>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
 </div>

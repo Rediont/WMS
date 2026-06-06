@@ -1,7 +1,7 @@
 
 import { ValidatorFn } from '@angular/forms';
 
-export type FieldType = 'text' | 'number' | 'email' | 'date' | 'select' | 'checkbox';
+export type FieldType = 'text' | 'number' | 'email'| 'password' | 'date' | 'select' | 'checkbox';
 
 export interface SelectOption {
   value: string | number;
@@ -20,5 +20,5 @@ export interface FormField {
 export interface FormConfig {
   title: string;            // Заголовок форми (напр., 'Додати клієнта')
   submitText: string;       // Текст кнопки (напр., 'Зберегти')
-  fields: FormField[];      // Масив полів форми
+  fields: FormField[];      
 }

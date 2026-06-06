@@ -14,8 +14,8 @@ export class PaymentService {
 
   constructor(http: HttpClient) {}
 
-  loadPayments(page: number): Observable<BillRecordDto[]> {
-    const params = new HttpParams().set('page', page.toString());
+  loadPayments(page?: number): Observable<BillRecordDto[]> {
+    const params = new HttpParams().set('page', page?.toString() || '0');
     return this.http.get<BillRecordDto[]>(`${this.apiUrl}/all`, { params });
   }
 

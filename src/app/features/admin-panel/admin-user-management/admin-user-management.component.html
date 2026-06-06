@@ -3,7 +3,7 @@
 </div>
 <div class="container">
     <div class="user-management-actions">
-        <button mat-raised-button color="primary" (click)="onAddUser()">Додати</button>
+        <button mat-raised-button color="primary" (click)="openAddUserDialog()">Додати</button>
         
         <button mat-raised-button color="accent" [disabled]="!selectedUser()" (click)="onEditUser()">Змінити</button>
         <button mat-raised-button color="warn" [disabled]="!selectedUser()" (click)="onDeleteUser()">Видалити</button>

@@ -3,7 +3,7 @@ import { GenericTableComponent } from '../../../shared/generic-table/app-table.c
 import { TableColumn } from '../../../shared/generic-table/table-config.model';
 import { MatButton } from "@angular/material/button";
 import { MatDivider } from "@angular/material/divider";
-import { ApiContractObject, Contract } from '../models/contract.model';
+import { ApiContractObject, Contract, FilteredContract } from '../models/contract.model';
 import { ContractService } from '../contract.service';
 import { FilterField } from '../../../shared/generic-filter/model/generic-filter.model';
 import { GenericFilterComponent } from '../../../shared/generic-filter/component/generic-filter.component';
@@ -36,37 +36,36 @@ export class ContractsComponent {
 
 
   contractColumns: TableColumn[] = [
-    { key: 'index', label: '№' },
-    { key: 'contractId', label: 'Contract ID' },
-    { key: 'contractName', label: 'Name' },
-    { key: 'clientName', label: 'Client Name' },
-    { key: 'statusDisplay', label: 'Status' }
+    { key: 'contractId', label: 'ID контракту' },
+    { key: 'contractName', label: 'Назва контракту' },
+    { key: 'clientName', label: 'Ім\'я клієнта' },
+    { key: 'statusDisplay', label: 'Статус' }
   ];
 
   contractFilterConfig: FilterField[] = [
     { 
       key: 'clientId', 
-      label: 'Client', 
+      label: 'Клієнт', 
       type: 'select', 
       options: [] 
     },
     { 
       // Змінено ключ та тип для фільтрації по проміжку часу (З - По)
       key: 'contractDateRange', 
-      label: 'Date Range', 
+      label: 'Діапазон дат', 
       type: 'date-range' 
     },
     { 
       key: 'status', 
-      label: 'Status', 
+      label: 'Статус контракту', 
       type: 'select', 
       options: [
         //статуси контракту
-        { value: 0, display: 'Inactive' },    // 0 замість 'Inactive'
-        { value: 1, display: 'Active' },      // 1 замість 'Active'
-        { value: 2, display: 'Terminated' },  // 2 замість 'Terminated'
-        { value: 3, display: 'Completed' },   // 3 замість 'Completed'
-        { value: 4, display: 'Invalid' }      // 4 замість 'Invalid'
+        { value: 0, display: 'Неактивний' },    // 0 замість 'Inactive'
+        { value: 1, display: 'Активний' },      // 1 замість 'Active'
+        { value: 2, display: 'Розірваний' },  // 2 замість 'Terminated'
+        { value: 3, display: 'Завершений' },   // 3 замість 'Completed'
+        { value: 4, display: 'Недійсний' }      // 4 замість 'Invalid'
       ] 
     }
   ];
@@ -146,51 +145,47 @@ export class ContractsComponent {
 
       } else {
         const statusMap: { [key: number]: string } = {
-          0: 'Inactive',
-          1: 'Active',
-          2: 'Terminated',
-          3: 'Completed',
-          4: 'Invalid'
+          1: 'Неактивний',
+          2: 'Активний',
+          3: 'Розірваний',
+          4: 'Завершений',
+          5: 'Недійсний'
         };
 
         this.contractItems = this.appState.lookups.contracts.map(c => ({
-
+          
           contractId: c.id,
           contractName: c.contractName,
           clientId: c.clientId,
           clientName: c.clientName,
-          statusDisplay: statusMap[c.status] ?? 'Unknown',
+          statusDisplay: statusMap[c.status + 1] ?? 'Unknown',
           
         }));
       }
     });
   }
 
-  // Виніс завантаження контрактів в окремий метод для зручності
   private loadAllContracts( page: number = 0) {
     this.contractService.getContracts(page).subscribe({
       next: (contracts) => {
         console.log('Дані, що прийшли з бекенду:', contracts);
 
-        // Словник, де 0 — це Inactive (згідно з твоїм C# Enum)
         const statusMap: { [key: number]: string } = {
-          0: 'Inactive',
-          1: 'Active',
-          2: 'Terminated',
-          3: 'Completed',
-          4: 'Invalid'
+          1: 'Неактивний',
+          2: 'Активний',
+          3: 'Розірваний',
+          4: 'Завершений',
+          5: 'Недійсний'
         };
 
         this.contractItems = contracts.map(c => {
-          // Перевіряємо, чи є в об'єкті clientName (для дебагу)
           if (!c.clientName) {
             console.warn(`Контракт ID ${c.id} прийшов без імені клієнта!`);
           }
 
           return {
             ...c,
-            // Створюємо окреме текстове поле, яке таблиця точно відобразить
-            statusDisplay: statusMap[c.status] ?? 'Unknown'
+            statusDisplay: statusMap[c.status + 1] ?? 'Unknown'
           };
         });
       },
@@ -199,13 +194,11 @@ export class ContractsComponent {
   }
 
   private populateClientFilter() {
-    // Перетворюємо масив клієнтів з бекенду у формат { value, display }, який розуміє наш фільтр
     const clientOptions = this.appState.lookups.clients.map(client => ({
       value: client.id,
       display: client.name
     }));
 
-    // Оновлюємо конфігурацію фільтра (важливо робити це через .map(), щоб Angular помітив зміни)
     this.contractFilterConfig = this.contractFilterConfig.map(field => {
       if (field.key === 'clientId') {
         return { ...field, options: clientOptions };
@@ -220,7 +213,6 @@ export class ContractsComponent {
       label: client.name
     }));
 
-    // 2. Знаходимо поле 'clientId' у конфігурації форми і оновлюємо його options
     this.contractFormConfig.fields = this.contractFormConfig.fields.map(field => {
       if (field.key === 'clientId') {
         return { ...field, options: clientOptions };
@@ -234,7 +226,6 @@ export class ContractsComponent {
       const clientControl = this.filterComponent.filterForm.get('clientId');
       
       if (clientControl) {
-        // Встановлюємо значення у випадаючий список
         clientControl.setValue(clientId);
         
         // Автоматично натискаємо "Apply" (це викличе метод applyFilter нижче)
@@ -243,8 +234,25 @@ export class ContractsComponent {
     }
   }
 
-  applyFilter(filterValues: any) {
+  applyFilter(filterValues: FilteredContract[]) {
     console.log('Дані з фільтра:', filterValues);
+    this.contractService.getContracts(this.currentPage, filterValues).subscribe({
+      next: (contracts) => {
+        console.log('Відфільтровані дані:', contracts);
+        const statusMap: { [key: number]: string } = {
+          1: 'Inactive',
+          2: 'Active',
+          3: 'Terminated',
+          4: 'Completed',
+          5: 'Invalid'
+        };
+        this.contractItems = contracts.map(c => ({
+          ...c,
+          statusDisplay: statusMap[c.currentStatus + 1] ?? 'Unknown'
+        }));
+      },
+      error: (err) => console.error('Помилка застосування фільтра:', err)
+    });
   }
 
   openAddContractDialog() {
@@ -279,7 +287,6 @@ export class ContractsComponent {
               4: 'Invalid'
             };
             
-            // Шукаємо ім'я клієнта у словнику, щоб показати в таблиці
             const matchedClient = this.appState.lookups.clients.find(c => c.id == createdContract.clientId);
             
             const newTableItem: Contract = {

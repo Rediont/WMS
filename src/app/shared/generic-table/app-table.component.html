@@ -4,11 +4,11 @@
       <tr>
         <th class="checkbox-cell">
           @if(showCheckbox) {
-          <input 
-            type="checkbox" 
-            [checked]="isAllSelected()"
-            [disabled]="data.length === 0"
-            (change)="toggleAll($event)">
+            <input 
+              type="checkbox" 
+              [checked]="isAllSelected()"
+              [disabled]="data.length === 0"
+              (change)="toggleAll($event)">
           }
         </th>
 
@@ -18,28 +18,28 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let row of data; let i = index" 
+      <tr *ngFor="let row of data" 
           (click)="rowClicked.emit(row)" 
           style="cursor: pointer"
-          [class.selected-row]="isSelected(row)"> <td class="checkbox-cell" (click)="$event.stopPropagation()">
-            
+          [class.selected-row]="isSelected(row)"> 
+        
+        <td class="checkbox-cell" (click)="$event.stopPropagation()">
           @if (showCheckbox) {
-            <input type="checkbox" [checked]="isAllSelected()" (change)="toggleAll($event)">
+            <input 
+              type="checkbox" 
+              [checked]="isSelected(row)" 
+              (change)="toggleRow(row, $event)">
           }
         </td>
 
         <td *ngFor="let col of columns">
-          @if (col.key === 'index') {
-             {{ i + 1 }}
-          } @else {
-             {{ row[col.key] }}
-          }
+          {{ row[col.key] }}
         </td>
       </tr>
     </tbody>
   </table>
   
   <div *ngIf="data.length === 0" class="no-data">
-    No records found.
+    Немає записів.
   </div>
 </div>

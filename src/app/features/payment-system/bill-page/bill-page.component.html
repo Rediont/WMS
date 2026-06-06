@@ -56,16 +56,15 @@
       <app-table 
         [data]="billData()?.items ?? []" 
         [columns]="tableColumns"
-        [rowIdKey]="billDataRowIdKey">
+        [rowIdKey]="billDataRowIdKey"
+        [showCheckbox]="false">
       </app-table>
     </div>
 
-    @if (billData()) {
-      <div class="total-summary">
-        <span>Загальна сума до сплати:</span>
-        <strong>{{ billData()?.totalCost | currency:'UAH':'symbol':'1.2-2' }}</strong>
-      </div>
-    }
+    <div class="total-summary">
+      <span>Загальна сума до сплати:</span>
+      <strong>{{ billData()?.totalCost ?? 0 | currency:'UAH':'symbol':'1.2-2' }}</strong>
+    </div>
 
     <div class="action-footer">
       <button mat-raised-button color="warn" (click)="cancel()">Відмінити</button>

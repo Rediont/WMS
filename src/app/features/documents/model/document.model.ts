@@ -20,3 +20,8 @@ export interface NewDocumentForm {
   items: DocumentItemForm[];
 }
 
+export interface WeeklyDocumentStatsDto {
+  dates: string[];
+  arrivals: number[];
+  departures: number[];
+}

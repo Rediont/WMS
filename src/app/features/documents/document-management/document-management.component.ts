@@ -30,7 +30,7 @@ export class DocumentManagementComponent {
   documentItems: DocumentObject[] = [];
 
   documentColumns: TableColumn[] = [
-    { key: 'index', label: '№' },
+    // { key: 'index', label: '№' },
     { key: 'id', label: 'ID документа' },
     { key: 'type', label: 'Тип документа' },
     { key: 'clientName', label: 'Клієнт' },
@@ -78,7 +78,7 @@ export class DocumentManagementComponent {
     // Мапимо типи документів (ті, що ми зробили з Enum)
     const documentTypeOptions = (lookups.documentTypes || []).map(dt => ({
       value: dt.id,
-      display: dt.name
+      display: this.documentService.DocumentTypeNames[dt.id + 1] || dt.name
     }));
 
     // Мапимо клієнтів

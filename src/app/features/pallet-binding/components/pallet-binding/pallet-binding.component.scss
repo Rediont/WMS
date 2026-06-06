@@ -72,6 +72,10 @@
     }
 
     .header-actions {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      
       button {
         height: 40px; // Підганяємо висоту кнопки під висоту дропдаунів
         font-size: 13px;

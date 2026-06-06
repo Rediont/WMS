@@ -1,6 +1,8 @@
 .add-bill-container {
   width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
+  min-height: 360px;
 
   h2 {
     color: #fff;
@@ -10,7 +12,7 @@
 }
 
 .bill-filters {
-  background: white;
+  background: var(--bg-card)  ;
   padding: 15px 20px 2px 20px; // Зменшено padding знизу, бо mat-form-field має свій відступ
   border-radius: 8px;
   margin-bottom: 10px;
@@ -40,10 +42,10 @@
 }
 
 .table-wrapper {
-  min-height: 230px;
-  background-color: #3f3f3f;
+  min-height: 220px;
+  background-color: var(--bg-table);
   border-radius: 8px;
-  border: 1px solid #555;
+  border: 1px solid var(--border-color);
   overflow: hidden; // Щоб таблиця не вилазила за радіус
 }
 

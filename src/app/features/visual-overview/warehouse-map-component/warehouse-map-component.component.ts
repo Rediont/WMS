@@ -55,7 +55,7 @@ export class WarehouseMapComponent {
         for (let i = 1; i <= count; i++) {
           Alleys.push({
             id: i,
-            name: `Alley ${i}`,
+            name: `Алея ${i}`,
             occupancy: occupancies.find(o => o.alleyId === i)?.occupancyPercentage || 0,
             cells: []
           });

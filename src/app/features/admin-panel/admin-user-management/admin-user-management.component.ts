@@ -6,6 +6,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserFormDialogComponent } from './dialog-form/user-form-dialog.component';
 import { UserManagementService } from './service/user-management.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormConfig } from '../../../shared/dynamic-form/models/dynamic-form.model';
+import { Validators } from '@angular/forms';
+import { DynamicFormDialogComponent } from '../../../shared/dynamic-form/dynamic-form-component/dynamic-form-dialog.component';
 
 @Component({
   selector: 'app-admin-user-management',
@@ -25,20 +28,48 @@ export class AdminUserManagementComponent {
   users : any[] = []
 
   userManagementColumns: TableColumn[] = [
-    { key: 'index', label: '№' },
-    { key: 'id', label: 'User ID' },
-    { key: 'email', label: 'Email' },
-    { key: 'role', label: 'Role' }
+    { key: 'id', label: 'ID користувача' },
+    { key: 'email', label: 'Пошта' },
+    { key: 'role', label: 'Роль' }
   ];
 
   rowIdKeyForUsers = 'id';
+
+  userFormConfig: FormConfig = {
+    title: 'Додати нового користувача',
+    submitText: 'Зберегти',
+    fields: [
+      {
+        key: 'email',
+        label: 'Email',
+        type: 'email',
+        validators: [Validators.required, Validators.email]
+      },
+      {
+        key: 'role',
+        label: 'Роль',
+        type: 'select', // Вказуємо тип select для випадаючого списку
+        options: [      // Передаємо масив варіантів
+          { value: 'Admin', label: 'Адмін' },
+          { value: 'Worker', label: 'Працівник' },
+          { value: 'Client', label: 'Клієнт' }
+        ],
+        validators: [Validators.required]
+      },
+      {
+        key: 'password',
+        label: 'Пароль',
+        type: 'password',
+        validators: [Validators.required, Validators.minLength(6)]
+      }
+    ]
+  };
 
   ngOnInit() {
     this.loadUsers();
   }
 
   loadUsers() {
-    // Тут ти маєш тягнути список користувачів з бекенду
     this.userService.getAllUsers().subscribe(data => {
       this.users = data;
     });
@@ -49,31 +80,26 @@ export class AdminUserManagementComponent {
     this.selectedUser.set(this.selectedUser()?.id === user.id ? null : user);
   }
 
-onAddUser() {
-    const dialogRef = this.dialog.open(UserFormDialogComponent, {
-      width: '400px',
-      data: null 
+  openAddUserDialog() {
+    const dialogRef = this.dialog.open(DynamicFormDialogComponent, {
+      width: '500px',
+      data: this.userFormConfig,
+      disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
+      // result міститиме { email: '...', role: '...', password: '...' }
       if (result) {
-        // result містить дані з форми (email, password, role)
+        console.log('Дані з форми:', result);
+        
+        // Викликаємо сервіс (заміни userService на свій реальний сервіс)
         this.userService.registerUser(result).subscribe({
-          next: (successMessage) => {
-            // Показуємо успішне повідомлення від бекенду
-            this.snackBar.open(successMessage, 'OK', { duration: 3000 });
-            
-            // Оновлюємо таблицю, щоб новий користувач з'явився у списку
-            this.loadUsers();
+          next: (createdUser) => {
+            this.users = [...this.users, createdUser];
+            console.log('Користувача успішно створено');
           },
           error: (err) => {
-            // Identity повертає BadRequest, Angular ховає текст помилки в err.error
-            console.error('Помилка реєстрації:', err);
-            const errorMessage = typeof err.error === 'string' 
-                ? err.error 
-                : 'Не вдалося створити користувача. Перевірте вимоги до пароля.';
-                
-            this.snackBar.open(errorMessage, 'Закрити', { duration: 5000 });
+            console.error('Помилка при створенні користувача:', err);
           }
         });
       }

@@ -24,24 +24,24 @@
     @if (selectedAlley(); as currentAlley) {
       <div class="map-header">
         <h3>Карта алеї: {{ currentAlley.name }}</h3>
-        <button mat-raised-button color="primary" (click)="goToAlley(currentAlley.id)">
+        <!-- <button mat-raised-button color="primary" (click)="goToAlley(currentAlley.id)">
           Перейти до стелажів
-        </button>
+        </button> -->
       </div>
 
       <div class="rack-vertical-view">
         @for (floor of alleyFloorMap(); track floor.floorIndex) {
           <div class="floor-row">
-            <div class="floor-label">Поверх {{ floor.floorIndex + 1 }}</div>
+            <div class="floor-label">Поверх {{ floor.floorIndex }}</div>
             
             <div class="floor-cells">
               @for (cell of floor.cellOccupancies; track cell.cellIndex) {
                 <div class="cell-slot" 
                      [style.background-color]="getCellSlotColor(cell.freeCapacity)"
-                     [matTooltip]="'Комірка: ' + cell.cellIndex + ', Вільно місць: ' + cell.freeCapacity"
+                     matTooltip="Комірка: {{ cell.cellIndex }}, Вільно місць: {{ cell.freeCapacity | number:'1.0-1' }}"
                      (click)="onCellClick(cell.cellIndex, floor.floorIndex)">
                   <span class="cell-index">{{ cell.cellIndex }}</span>
-                  <span class="capacity-badge">F: {{ cell.freeCapacity }}</span>
+                  <span class="capacity-badge">F: {{ cell.freeCapacity | number:'1.0-1' }}</span>
                 </div>
               }
             </div>

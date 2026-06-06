@@ -1,10 +1,11 @@
 // app-state.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { GlobalLookup } from './lookup.model';
 import { environment } from '../../../environments/environment.development'; // Твій шлях до API
 import { WarehouseSettingsLookup } from './lookup.model';
+import { CellStatsDto } from '../../features/dashboard/model/dashboard.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,10 @@ export class AppStateService {
         console.log('Всі словники успішно завантажені при старті сайту:', this.lookups);
       })
     );
+  }
+
+  getCellStats(): Observable<CellStatsDto> {
+    const url = `${environment.apiUrl}/Cell/stats`;
+    return this.http.get<CellStatsDto>(url);
   }
 }

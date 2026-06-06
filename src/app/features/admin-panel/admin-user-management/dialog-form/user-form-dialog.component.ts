@@ -54,7 +54,31 @@ import { CommonModule } from '@angular/common';
     </mat-dialog-actions>
   `,
   styles: [`
-    .dialog-form { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; min-width: 320px; }
+    /* Задаємо світлий фон безпосередньо, якщо глобальна тема десь "протікає" */
+    :host {
+      display: block;
+      background-color: #ffffff; 
+      color: #333333;
+    }
+
+    .dialog-title {
+      margin: 0 0 16px;
+      padding-bottom: 16px;
+      color: #202124;
+    }
+
+    .dialog-form { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px; /* outline поля візуально більші, тому gap можна зменшити */
+      margin-top: 8px; 
+      min-width: 350px; 
+    }
+
+    .dialog-actions {
+      padding: 16px 24px;
+      margin-bottom: -8px;
+    }
   `]
 })
 export class UserFormDialogComponent {
