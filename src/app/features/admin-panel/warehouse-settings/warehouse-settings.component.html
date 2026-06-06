@@ -1,0 +1,67 @@
+<div class="settings-container">
+  <mat-card class="settings-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar color="primary">settings</mat-icon>
+      <mat-card-title>Налаштування складу</mat-card-title>
+      <mat-card-subtitle>Базові розміри та місткість</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="warehouseForm" (ngSubmit)="onSubmit()" class="settings-form">
+        
+        <div class="form-body">
+          
+          <div class="form-inputs">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Кількість алей на складі</mat-label>
+              <input matInput type="number" formControlName="numberOfAlleys" placeholder="Наприклад: 10">
+              <mat-icon matSuffix>view_array</mat-icon>
+              @if (warehouseForm.get('numberOfAlleys')?.hasError('required')) {
+                <mat-error>Це поле є обов'язковим</mat-error>
+              }
+              @if (warehouseForm.get('numberOfAlleys')?.hasError('min')) {
+                <mat-error>Мінімальне значення - 1</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Кількість поверхів (ярусів)</mat-label>
+              <input matInput type="number" formControlName="numberOfFloorsPerAlley" placeholder="Наприклад: 5">
+              <mat-icon matSuffix>layers</mat-icon>
+              @if (warehouseForm.get('numberOfFloorsPerAlley')?.hasError('required')) {
+                <mat-error>Це поле є обов'язковим</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Комірок на одному поверсі</mat-label>
+              <input matInput type="number" formControlName="CellsPerAlleyFloor" placeholder="Наприклад: 20">
+              <mat-icon matSuffix>grid_on</mat-icon>
+              @if (warehouseForm.get('CellsPerAlleyFloor')?.hasError('required')) {
+                <mat-error>Це поле є обов'язковим</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="calculated-info">
+            <h3 class="mat-h3">Розрахункова місткість:</h3>
+            <div class="info-row">
+              <span class="label">Комірок в 1 алеї:</span>
+              <span class="value">{{ calculatedCellsInAlley }}</span>
+            </div>
+            <div class="info-row total">
+              <span class="label">Загалом місць на складі:</span>
+              <span class="value success-text">{{ calculatedTotalCells }}</span>
+            </div>
+          </div>
+
+        </div> </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-flat-button color="primary" [disabled]="warehouseForm.invalid" (click)="onSubmit()">
+        <mat-icon>save</mat-icon> Зберегти зміни
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

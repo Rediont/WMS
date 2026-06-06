@@ -1,0 +1,45 @@
+
+.client-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%; /* або наприклад 80vh */
+  gap: 10px;
+  overflow: hidden;
+}
+
+.client-list {
+  flex-grow: 1;
+  height: 300px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-table);
+}
+
+h2{
+  margin: 0;
+  color: var(--text-main);
+}
+
+.client-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; 
+}
+
+.client-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  border-radius: 5px;
+}

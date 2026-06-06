@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 20px;
+  min-height: 400px;
+}
+
+.user-management-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.user-management-list {
+  height: 340px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: var(--bg-table);
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}

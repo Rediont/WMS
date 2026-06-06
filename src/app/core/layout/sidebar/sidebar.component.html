@@ -1,6 +1,12 @@
+<div class="wrapper">
+    <ul class="sidebar">
+        <li><a href="#">Головна</a></li>
+        <li><a href="/warehouse">Керування складом</a></li>
+        <li><a href="/workflow">Клієнти та документи</a></li>
+        @if(isAdmin()){
+            <li><a href="/admin">Адмінська панель</a></li>
+        }
+        <li><a (click)="logout()">Вийти</a></li>
+    </ul>
+</div>
 
-<ul class="sidebar">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Settings</a></li>
-    <li><a href="#">Logout</a></li>
-</ul>

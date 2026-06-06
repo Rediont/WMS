@@ -1,0 +1,41 @@
+.pallet-types-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 400px;
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  flex-grow: 1;
+}
+
+.pallet-types-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Займає всю вільну ширину */
+  min-width: 0; /* Щоб таблиця не ламала сітку */
+  height: 100%;
+  gap: 20px;
+}
+
+.pallet-types-list {
+  flex-grow: 1;
+  border-radius: 5px;
+  background: var(--bg-table);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pallet-types-actions {
+  display: flex;
+  gap: 10px;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}

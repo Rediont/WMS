@@ -1,0 +1,35 @@
+<div class="contracts-page-wrapper">
+
+    <aside class="contracts-sidebar">
+        <app-generic-filter 
+            [fields]="contractFilterConfig" 
+            (filterChanged)="applyFilter($event)">
+        </app-generic-filter>
+    </aside>
+
+    <div class="contracts-container">
+        <h2>Управління контрактами</h2>
+        
+        <div class="contracts-actions">
+            <button mat-raised-button color="primary" (click)="openAddContractDialog()">Додати новий контракт</button>
+            <!-- <button mat-raised-button color="warn">Видалити контракт</button> -->
+        </div>
+        
+        <div class="contracts-list">
+            <app-table 
+                [columns]="contractColumns" 
+                [data]="contractItems" 
+                [rowIdKey]="rowIdKeyForContracts"
+                (rowClicked)="onItemSelected($event)"
+                (selectionChanged)="onSelectionChange($event)">
+            </app-table>
+        </div>
+
+        <div class="page-buttons">
+            <button mat-button (click)="goToPreviousPage()" [disabled]="currentPage === 0">Попередня</button>
+            <span>Сторінка {{ currentPage + 1 }}</span>
+            <button mat-button (click)="goToNextPage()" [disabled]="currentPage === totalPages - 1">Наступна</button>
+        </div>
+    </div>
+
+</div>

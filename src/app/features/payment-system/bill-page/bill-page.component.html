@@ -1,0 +1,82 @@
+<div class="add-bill-container">
+  <h2>Додавання нового чеку</h2>
+
+  <section class="bill-filters card">
+    <div class="filter-row">
+      
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Клієнт</mat-label>
+        <mat-select [(ngModel)]="filters.clientId" (selectionChange)="onClientChange()">
+          <mat-option [value]="null">-- Оберіть клієнта --</mat-option>
+          @for (client of clients(); track client.id) {
+            <mat-option [value]="client.id">{{ client.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Контракт</mat-label>
+        <mat-select [(ngModel)]="filters.contractId" [disabled]="!filters.clientId">
+          <mat-option [value]="null">-- Оберіть контракт --</mat-option>
+          @for (contract of filteredContracts(); track contract.id) {
+            <mat-option [value]="contract.id">{{ contract.contractName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Дата початку</mat-label>
+        <input matInput [matDatepicker]="startPicker" [(ngModel)]="filters.periodStart">
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Дата кінця</mat-label>
+        <input matInput [matDatepicker]="endPicker" [(ngModel)]="filters.periodEnd">
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button 
+          mat-raised-button 
+          color="primary"
+          (click)="calculateBill()"
+          [disabled]="!filters.clientId || !filters.contractId || !filters.periodStart || !filters.periodEnd">
+          <mat-icon>calculate</mat-icon>
+          Порахувати
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="bill-results">
+    <div class="table-wrapper card">
+      <app-table 
+        [data]="billData()?.items ?? []" 
+        [columns]="tableColumns"
+        [rowIdKey]="billDataRowIdKey"
+        [showCheckbox]="false">
+      </app-table>
+    </div>
+
+    <div class="total-summary">
+      <span>Загальна сума до сплати:</span>
+      <strong>{{ billData()?.totalCost ?? 0 | currency:'UAH':'symbol':'1.2-2' }}</strong>
+    </div>
+
+    <div class="action-footer">
+      <button mat-raised-button color="warn" (click)="cancel()">Відмінити</button>
+      <button mat-raised-button color="warn" (click)="reset()">Очистити</button>
+      <button 
+        mat-raised-button 
+        color="accent" 
+        (click)="saveBill()" 
+        [disabled]="!billData()?.items?.length">
+        <mat-icon>save</mat-icon>
+        Зберегти чек
+      </button>
+    </div>
+  </section>
+</div>

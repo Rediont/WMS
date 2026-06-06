@@ -1,0 +1,16 @@
+<div class="documents-container">
+  <div class="page-header">
+    <h2><mat-icon>description</mat-icon> Документи надходження (Приходи)</h2>
+    <p>Оберіть документ для переходу до режиму прив'язки палет до комірок склада.</p>
+  </div>
+
+  <div class="table-wrapper">
+    <app-table 
+      [columns]="tableColumns" 
+      [data]="tableData()"
+      [rowIdKey]="rowIdKey"
+      (rowClicked)="navigateToSlotting($event)"
+      [showCheckbox]="false">
+    </app-table>
+  </div>
+</div>

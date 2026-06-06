@@ -1,0 +1,23 @@
+
+<div class="admin-wrapper">
+  <div class="admin-top-bar">Панель Адміністратора WMS</div>
+  <div class="content-wrapper">
+    <div class="admin-sidebar">
+      <nav>
+        <ul>
+          <li><a href="/admin/dashboard" routerLinkActive="active">Головна сторінка</a></li>
+          <li><a href="/admin/users" routerLinkActive="active">Керування користувачами</a></li>
+          <li><a href="/admin/clients" routerLinkActive="active">Керування клієнтами</a></li>
+          <li><a href="/admin/warehouse-settings" routerLinkActive="active">Налаштування складу</a></li>
+          <li><a href="/admin/pallet-types" routerLinkActive="active">Типи палет</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="admin-content">
+      <div class="router">
+        <router-outlet></router-outlet> 
+      </div>
+    </div>
+  </div>
+</div>

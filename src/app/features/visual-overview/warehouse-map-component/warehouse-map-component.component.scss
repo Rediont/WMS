@@ -1,0 +1,188 @@
+.warehouse-layout {
+  display: flex;
+  height: 460px; // підлаштуй під висоту свого тулбару, якщо він є
+  background: #1a1a1a;
+  color: #e0e0e0;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 8px;
+
+  .alley-sidebar {
+    flex-grow: 1;
+    max-width: 300px;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 8px 0 0 8px;
+
+    h3 { margin-top: 0; margin-bottom: 20px; color: #fff; font-weight: 400; }
+
+    .alley-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-radius: 5px;
+
+      .alley-item {
+        background: var(--bg-map-item);
+        padding: 14px;
+        border-radius: 6px;
+        border-left: 5px solid transparent;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover { background: #353535; }
+        &.active { 
+          background: #3d3d3d; 
+          box-shadow: inset 0 0 0 1px #4a9eff;
+        }
+
+        .alley-info {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 8px;
+          .name { font-weight: bold; color: var(--text-main); }
+          .perc { font-size: 0.9rem; color: var(--text-muted); }
+        }
+
+        .occupancy-bar {
+          height: 6px;
+          background: #1a1a1a;
+          border-radius: 3px;
+          overflow: hidden;
+          .fill { height: 100%; transition: width 0.3s ease; }
+        }
+      }
+    }
+  }
+
+  .alley-map-container {
+    flex: 3;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    overflow: hidden;
+
+    .map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-shrink: 0;
+      h3 { margin: 0; font-size: 1.4rem; color: var(--text-main); }
+    }
+
+    // Стилі для нового вертикального стелажа
+    .rack-vertical-view {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow-y: auto;
+      gap: 16px;
+      background: var(--bg-card);
+      padding: 25px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+
+      .floor-row {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border-bottom: 1px dashed var(--border-color);
+        padding-bottom: 14px;
+
+        &:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .floor-label {
+          min-width: 90px;
+          font-weight: bold;
+          color: var(--text-muted);
+          font-size: 0.9rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .floor-cells {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .cell-slot {
+          width: 65px;
+          height: 55px;
+          border-radius: 4px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: #121212; // Темний текст, бо плашки світлі (зелені/жовті/червоні)
+          cursor: pointer;
+          transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+          border: 1px solid rgba(0, 0, 0, 0.15);
+          user-select: none;
+
+          &:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+          }
+
+          .cell-index { font-weight: bold; font-size: 1rem; }
+          .capacity-badge { font-size: 0.7rem; font-weight: 500; opacity: 0.75; }
+        }
+      }
+
+      .no-cells-state {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+      }
+    }
+
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      gap: 10px;
+      mat-icon { font-size: 48px; width: 48px; height: 48px; }
+      p { margin: 0; font-size: 1.1rem; }
+    }
+  }
+}
+
+
+.rack-vertical-view, .alley-list {
+  overflow-y: auto;
+  
+  // Увімкнення стандартного тонкого скролбару для Firefox
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+
+  // Стилізація для Chrome, Safari, Edge, Opera
+  &::-webkit-scrollbar {
+    width: 6px; // Робимо смугу дуже тонкою (всього 6 пікселів)
+  }
+
+  // Доріжка, по якій рухається повзунок (робимо її прозорою)
+  &::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+
+  // Сам повзунок (риска)
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15); // Напівпрозорий білий колір під тон темної теми
+    border-radius: 10px; // Заокруглюємо кути риски, щоб вона виглядала як каgeneric капсула
+    transition: background-color 0.2s ease;
+
+    // Робимо риску яскравішою, коли користувач наводиться на неї мишкою
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.35); 
+    }
+  }
+}

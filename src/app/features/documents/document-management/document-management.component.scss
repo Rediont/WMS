@@ -1,0 +1,80 @@
+/* Головна обгортка сторінки */
+.documents-page-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  max-height: 450px; /* 100% висоти вікна мінус невеликий відступ */
+  gap: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Ліва колонка (Сайдбар) */
+.documents-sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  height: 100%;
+  max-height: 440px; /* Висота для появи скролу, якщо буде багато фільтрів */
+  
+  background-color: #2c2c2c;
+  border: 1px solid #444;
+  border-radius: 8px;
+  
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Права колонка (Контент) */
+.documents-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Займає всю вільну ширину */
+  min-width: 0; /* Щоб таблиця не ламала сітку */
+  gap: 16px;
+}
+
+h2 {
+  margin: 0;
+  color: white;
+}
+
+.documents-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; 
+}
+
+.document-page-navigation {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+/* Блок самої таблиці */
+.documents-list {
+  flex-grow: 1; /* Таблиця розтягується до самого низу екрана */
+  border-radius: 8px;
+  max-height: 280px; /* Висота для появи скролу, якщо буде багато документів */
+  background-color: var(--bg-table); /* Світло-сірий фон для контрасту з таблицею */
+  border: 1px solid var(--border-color);
+  
+  display: flex;
+  flex-direction: column;
+}
+
+/* Змушуємо саму таблицю всередині займати весь простір і скролитися */
+app-table {
+  flex-grow: 1;  
+  overflow: auto;
+}
+
+app-generic-filter {
+  /* Щоб фільтр займав всю висоту сайдбару і міг скролитися, якщо буде багато полів */
+  height: 100%;
+}

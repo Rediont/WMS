@@ -1,0 +1,86 @@
+.details-container {
+    display: flex;
+    flex-direction: column;
+
+    height: 90%; 
+    max-height: 100%;
+
+    background-color: var(--bg-card); // Колір фону картки (під темну тему)
+    border-radius: 8px;
+    padding: 24px;
+    flex: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    margin-bottom: 24px;
+    overflow-y: auto;
+}
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; // Щоб кнопки падали вниз на маленьких екранах
+  gap: 16px;
+  margin-bottom: 16px;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+mat-divider {
+  margin: 16px 0 24px 0;
+  border-top-color: rgb(55, 55, 55); // Ледь помітна лінія для темної теми
+}
+
+// Сітка для інформаційних полів
+.info-grid {
+  display: grid;
+  // Автоматично розкидає колонки: мінімум 250px, якщо місця більше - розтягує
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .label {
+    font-size: 13px;
+    color: #aaaaaa; // Сірий колір для підписів
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .value {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  // Стиль для бейджика (наприклад, статусу)
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    border-radius: 16px;
+    background-color: #3f51b5; // Дефолтний синій (primary)
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    width: fit-content;
+  }
+}
+
+.extra-content {
+  margin-top: 10px;
+}

@@ -1,0 +1,33 @@
+
+<div class="inventory-page-wrapper">
+    <div class="inventory-sidebar">
+        <app-generic-filter 
+            [fields]="inventoryFilterConfig" 
+            (filterChanged)="applyFilter($event)">
+        </app-generic-filter>
+    </div>
+    <div class="inventory-content">
+        <div class="inventory-container">
+            <h2>Керування інвентарем</h2>
+            <!-- <div class="inventory-actions">
+                <button mat-raised-button color="warn" [disabled]="selectedInventoryItems.length === 0">Delete Item</button>
+            </div> -->
+
+            <div class="inventory-list">
+                <app-table 
+                [columns]="inventoryColumns" 
+                [data]="inventoryItems" 
+                [rowIdKey]="rowIdKeyForInventory"
+                (rowClicked)="onItemSelected($event)"
+                (selectionChanged)="onSelectionChange($event)">
+                </app-table>
+            </div>
+        </div>
+
+        <div class="document-page-navigation">
+            <button mat-button (click)="goToPreviousPage()" [disabled]="currentPage === 0">Попередня</button>
+            <span>Сторінка {{ currentPage + 1 }}</span>
+            <button mat-button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Наступна</button>            
+        </div>
+    </div>
+</div>

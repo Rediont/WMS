@@ -1,0 +1,116 @@
+.create-doc-page {
+  padding: 20px;
+  margin: 0 ; // Центруємо на екрані
+  background: var(--bg-card);
+  border-radius: 6px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  
+  h2 {
+    margin: 0;
+    color: var(--text-main);
+  }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section {
+  background: var(--bg-table);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    // color: #fff;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 8px;
+  }
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+.items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 8px;
+
+  h3 {
+    margin: 0;
+    border: none;
+    padding: 0;
+  }
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--bg-document-create);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+  .row-number {
+    color: var(--text-muted);
+    font-weight: bold;
+    width: 24px;
+  }
+
+  mat-form-field {
+    margin-bottom: -1.25em; // Прибирає зайвий відступ знизу у Material полів
+  }
+
+  .flex-grow {
+    flex-grow: 1;
+  }
+
+  .amount-field {
+    width: 120px;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 20px;
+  font-style: italic;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 10px;
+}

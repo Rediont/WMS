@@ -1,0 +1,45 @@
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th class="checkbox-cell">
+          @if(showCheckbox) {
+            <input 
+              type="checkbox" 
+              [checked]="isAllSelected()"
+              [disabled]="data.length === 0"
+              (change)="toggleAll($event)">
+          }
+        </th>
+
+        <th *ngFor="let col of columns">
+          {{ col.label }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of data" 
+          (click)="rowClicked.emit(row)" 
+          style="cursor: pointer"
+          [class.selected-row]="isSelected(row)"> 
+        
+        <td class="checkbox-cell" (click)="$event.stopPropagation()">
+          @if (showCheckbox) {
+            <input 
+              type="checkbox" 
+              [checked]="isSelected(row)" 
+              (change)="toggleRow(row, $event)">
+          }
+        </td>
+
+        <td *ngFor="let col of columns">
+          {{ row[col.key] }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div *ngIf="data.length === 0" class="no-data">
+    Немає записів.
+  </div>
+</div>

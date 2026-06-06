@@ -1,0 +1,74 @@
+.filter-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Форма займає всю доступну висоту сайдбару */
+  background-color: var(--bg-card);
+  padding: 20px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow: hidden; /* ВАЖЛИВО: забороняємо головному контейнеру розтягуватись */
+}
+
+/* Блок, який буде скролитися */
+.filter-content {
+  flex: 1; /* Займає весь вільний простір від верху до кнопок */
+
+  overflow-y: auto; /* Вмикаємо суцільний вертикальний скрол */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 8px; /* Додаємо відступ, щоб повзунок скролу не налізав на контент */
+  
+
+  /* Робимо скролбар тоншим і красивішим (працює в Chrome/Edge/Safari) */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd;
+    border-radius: 4px;
+  }
+}
+
+.filter-field {
+  width: 100%;
+}
+
+.checkbox-group-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  background-color: var(--bg-filter);
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  border-radius: 4px;
+  gap: 8px;
+
+  .checkbox-group-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 4px;
+    /* ПРИБРАЛИ max-height ТА overflow-y: auto. Тепер чекбокси розтягуються на всю свою висоту */
+  }
+}
+
+.filter-actions {
+  margin-top: 20px; /* Відступ від блоку зі скролом */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* flex-shrink: 0 не дає кнопкам сплюснутись, якщо контенту зверху занадто багато */
+  flex-shrink: 0; 
+
+  button {
+    width: 100%;
+    padding: 24px 0;
+    font-size: 1rem;
+  }
+}

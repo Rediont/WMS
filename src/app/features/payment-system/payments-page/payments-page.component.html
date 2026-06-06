@@ -1,0 +1,37 @@
+<div class="payments-page-wrapper">
+
+    <aside class="payments-sidebar">
+        <app-generic-filter 
+            [fields]="paymentFilterConfig" 
+            (filterChanged)="applyFilter($event)">
+        </app-generic-filter>
+    </aside>
+
+    <div class="payments-container">
+        <h2>Платежі</h2>
+        
+        <div class="payments-actions">
+            <button mat-raised-button color="primary" (click)="openAddPaymentDocumentDialog()">
+                Додати новий платіж
+            </button>
+        </div>
+        
+        <div class="payments-list">
+            <app-table 
+                [columns]="paymentColumns" 
+                [data]="paymentItems" 
+                [rowIdKey]="rowIdKeyForPayments"
+                (rowClicked)="onItemSelected($event)"
+                (selectionChanged)="onSelectionChange($event)"
+                [showCheckbox]="false">
+            </app-table>
+        </div>
+
+        <div class="page-buttons">
+            <button mat-button (click)="goToPreviousPage()" [disabled]="currentPage === 0">Попередня</button>
+            <span>Сторінка {{ currentPage + 1 }}</span>
+            <button mat-button (click)="goToNextPage()" [disabled]="currentPage === totalPages - 1">Наступна</button>
+        </div>
+    </div>
+
+</div>

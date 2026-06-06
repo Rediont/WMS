@@ -1,0 +1,229 @@
+.binding-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 480px;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  .binding-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #222;
+    padding: 10px 20px; // Зменшили внутрішні відступи самого хедера
+    border-radius: 8px;
+    border: 1px solid #333;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+
+    .dropdown-group {
+      display: flex;
+      gap: 12px; // Робимо відстань між дропдаунами компактнішою
+      align-items: center;
+      
+      mat-form-field {
+        width: 230px; // Трохи зменшили ширину полів
+        font-size: 13px; // Зменшили шрифт, щоб текст акуратно влазив у компактне поле
+
+        // Зменшуємо висоту самого контейнера Material Input
+        ::v-deep .mat-mdc-text-field-wrapper {
+          padding: 0 12px;
+          height: 40px; // Фіксована компактна висота замість дефолтних 56px
+          min-height: 40px;
+          display: flex;
+          align-items: center;
+          background-color: #2d2d2d !important; // Робимо фон темним під твій інтерфейс
+        }
+
+        // Вирівнюємо стрілочку дропдауну та текст по центру нової висоти
+        ::v-deep .mat-mdc-form-field-flex {
+          align-items: center;
+          height: 100%;
+        }
+
+        ::v-deep .mat-mdc-form-field-infix {
+          padding-top: 8px !important;
+          padding-bottom: 8px !important;
+          min-height: auto;
+        }
+
+        // Коригуємо позицію лейбла (тексту підказки вгорі), щоб він не злітав
+        ::v-deep .mdc-notched-outline__label {
+          top: 10px !important;
+          color: #aaa !important;
+        }
+
+        // Стилізуємо колір тексту всередині селектора
+        ::v-deep .mat-mdc-select-value {
+          color: #fff !important;
+        }
+
+        // Тонка рамка навколо селектора
+        ::v-deep .mdc-notched-outline__leading,
+        ::v-deep .mdc-notched-outline__notch,
+        ::v-deep .mdc-notched-outline__trailing {
+          border-color: #444 !important;
+        }
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      
+      button {
+        height: 40px; // Підганяємо висоту кнопки під висоту дропдаунів
+        font-size: 13px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+    }
+  }
+
+  .binding-workspace {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+    overflow: hidden; // Головний екран не скролиться
+
+    // ЛІВА ЧЕРГА ПАЛЕТ
+    .pallet-buffer-sidebar {
+      width: 320px;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+
+      .panel-header {
+        padding: 15px;
+        background: #2d2d2d;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #3a3a3a;
+        h3 { margin: 0; font-size: 1.1rem; }
+        .badge { background: #4a9eff; color: #fff; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+      }
+
+      .pallet-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        &::-webkit-scrollbar { width: 5px; }
+        &::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+        .pallet-card {
+          background: #2d2d2d;
+          border: 1px solid #3a3a3a;
+          border-radius: 6px;
+          padding: 12px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover { background: #353535; }
+          &.selected {
+            background: rgba(74, 158, 255, 0.15);
+            border-color: #4a9eff;
+            box-shadow: 0 0 8px rgba(74, 158, 255, 0.3);
+          }
+
+          .pallet-icon { color: #aaa; }
+          .pallet-info {
+            display: flex;
+            flex-direction: column;
+            .pallet-id { font-weight: bold; color: #fff; }
+            .pallet-client { font-size: 0.8rem; color: #888; margin-top: 2px; }
+          }
+        }
+      }
+
+      .empty-buffer {
+        text-align: center;
+        padding: 40px 20px;
+        color: #666;
+        mat-icon { font-size: 40px; width:40px; height:40px; margin-bottom: 10px; }
+      }
+    }
+
+    // ПРАВА КАРТА АЛЕЇ
+    .alley-grid-zone {
+      flex: 1;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      overflow-y: auto;
+      &::-webkit-scrollbar { width: 5px; }
+      &::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+      .rack-view {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .floor-row {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          border-bottom: 1px dashed #333;
+          padding-bottom: 12px;
+          &:last-child { border-bottom: none; }
+
+          .floor-title { min-width: 90px; color: #888; font-weight: 500; font-size: 0.9rem; text-transform: uppercase; }
+          .slots-container { display: flex; flex-wrap: wrap; gap: 8px; }
+
+          .cell-slot {
+            width: 70px;
+            height: 55px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #121212;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+
+            &.target-ready:hover {
+              transform: scale(1.08);
+              box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            }
+
+            .slot-number { font-weight: bold; font-size: 0.95rem; }
+            .slot-capacity { font-size: 0.7rem; opacity: 0.8; }
+          }
+        }
+      }
+
+      .select-alley-prompt {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #555;
+        gap: 10px;
+        mat-icon { font-size: 48px; width:48px; height:48px; }
+      }
+    }
+  }
+
+  
+
+}

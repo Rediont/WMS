@@ -1,44 +1,56 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
+@include mat.elevation-classes();
+@include mat.app-background();
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
+$WMS-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$WMS-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
+$WMS-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$WMS-primary: mat.define-palette(mat.$indigo-palette);
-$WMS-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$WMS-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$WMS-theme: mat.define-light-theme((
+// Твоя поточна світла тема Material
+$WMS-theme: mat.m2-define-dark-theme((
   color: (
     primary: $WMS-primary,
     accent: $WMS-accent,
     warn: $WMS-warn,
   ),
-  typography: mat.define-typography-config(),
+  typography: mat.m2-define-typography-config(),
   density: 0
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include mat.all-component-themes($WMS-theme);
 
-/* You can add global styles to this file, and also import other style files */
-body {
-    margin: 0px;
-    height: 100vh;
+/* =======================================================
+   ГЛОБАЛЬНІ CSS ЗМІННІ (Для кастомних компонентів)
+   ======================================================= */
+:root {
+  /* Темна тема для карток, таблиць, деталей */
+  --bg-main: #121212;
+  --bg-card: #212121;
+  --bg-header: #1e1e1e;
+  --bg-filter: #313131;
+  --bg-table: rgba(43, 43, 43);
+  --bg-map-item: #303030;
+  --bg-document-create: #464646;
+
+  --text-main: #ffffff;
+  --text-muted: #aaaaaa;  
+  
+  --border-color: rgba(255, 255, 255, 0.1);
+  --hover-row: rgba(255, 255, 255, 0.05);
+  --selected-row: rgba(63, 81, 181, 0.15); 
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* =======================================================
+   ГЛОБАЛЬНІ СТИЛІ БРАУЗЕРА
+   ======================================================= */
+html, body { 
+  height: 100%; 
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  /* 🔴 ДОДАЄМО: застосовуємо темний фон для всього екрану */
+  background-color: var(--bg-main); 
+  color: var(--text-main);
+}

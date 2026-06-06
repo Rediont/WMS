@@ -1,0 +1,55 @@
+
+.warehouse-remains-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%; /* або наприклад 80vh */
+  gap: 10px;
+}
+
+.remains-list {
+  flex-grow: 1;
+  height: 310px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+h2{
+    margin: 0;
+    color: white;
+}
+
+.remains-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; 
+  max-height: 40px;
+}
+
+.remains-filter-checkboxes {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    flex-grow: 3;
+    max-height: 38px;
+}
+
+.remains-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}

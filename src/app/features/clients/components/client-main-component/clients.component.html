@@ -1,0 +1,26 @@
+<div class="client-container">
+    <h2>Управління клієнтами</h2>
+    <div class="client-buttons">
+        <div class="client-actions">
+            <button mat-raised-button color="primary" (click)="openAddDialog()">Додати нового клієнта</button>
+            <!-- <button mat-raised-button color="warn" >Видалити клієнта</button> -->
+        </div>
+
+        <!-- <button mat-raised-button color="accent" (click)="goToContracts()">Перейти до контрактів</button> -->
+    </div>
+
+    <div class="client-list">
+        <app-table 
+        [columns]="clientColumns" 
+        [data]="clientItems" 
+        [rowIdKey]="rowIdKeyForClients"
+        (rowClicked)="onItemSelected($event)"
+        (selectionChanged)="onSelectionChange($event)"></app-table>
+    </div>
+
+    <div class="page-buttons">
+        <button mat-button (click)="goToPreviousPage()" [disabled]="currentPage === 0">Попередня</button>
+        <span>Сторінка {{ currentPage + 1 }}</span>
+        <button mat-button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Наступна</button>
+    </div>
+</div>

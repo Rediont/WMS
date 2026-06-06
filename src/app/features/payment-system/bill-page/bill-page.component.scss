@@ -1,0 +1,76 @@
+.add-bill-container {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-height: 360px;
+
+  h2 {
+    color: #fff;
+    margin: 0 0 10px 0;
+    font-weight: 500;
+  }
+}
+
+.bill-filters {
+  background: var(--bg-card)  ;
+  padding: 15px 20px 2px 20px; // Зменшено padding знизу, бо mat-form-field має свій відступ
+  border-radius: 8px;
+  margin-bottom: 10px;
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start; // Важливо для Material
+  }
+}
+
+.filter-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.form-actions {
+  display: flex;
+  height: 56px;
+  align-items: center;
+  padding-bottom: 10px;
+
+  button {
+    height: 52px;
+  }
+}
+
+.table-wrapper {
+  min-height: 220px;
+  background-color: var(--bg-table);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden; // Щоб таблиця не вилазила за радіус
+}
+
+.total-summary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  padding: 10px;
+  text-align: right;
+  border-radius: 8px;
+  margin: 10px 0;
+
+  span {
+    margin-right: 15px;
+    opacity: 0.8;
+  }
+
+  strong {
+    font-size: 24px;
+    color: #ffab40; // Акцентний колір для суми
+  }
+}
+
+.action-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 10px;
+}

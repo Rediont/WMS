@@ -1,0 +1,68 @@
+/* Загальний контейнер (опціонально, щоб обмежити висоту всієї сторінки) */
+.inventory-page-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  min-height: 440px; /* 100% висоти вікна мінус невеликий відступ */
+  gap: 20px;  
+  box-sizing: border-box;
+}
+
+.inventory-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0; 
+  gap: 5px;
+}
+
+.inventory-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 10px;
+}
+
+.inventory-sidebar {
+  width: 320px;
+  // height: 100%;
+  max-height: 440px;
+  
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+h2{
+    margin: 0;
+    color: white;
+}
+
+.inventory-actions {
+  display: flex;
+  gap: 10px; 
+}
+
+.inventory-list {
+  height: 340px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.document-page-navigation {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+app-generic-filter {
+  height: 100%;
+}

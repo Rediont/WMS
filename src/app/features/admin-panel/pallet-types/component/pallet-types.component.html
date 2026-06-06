@@ -1,0 +1,21 @@
+
+<div>
+    <h2>Управління типами палет</h2>
+</div>
+<div class="pallet-types-container">
+    <div class="pallet-types-actions">
+        <button mat-raised-button color="primary" (click)="openAddPalletTypeDialog()">Додати новий тип палети</button>
+        <!-- <button mat-raised-button color="warn">Видалити тип палети</button> -->
+    </div>
+    
+    <div class="pallet-types-list">
+        <app-table 
+            [columns]="palletTypeColumns" 
+            [data]="palletTypeItems" 
+            [rowIdKey]="rowIdKeyForPalletTypes"
+            (rowClicked)="onItemSelected($event)"
+            (selectionChanged)="onSelectionChanged($event)"
+            [showCheckbox]="false">
+        </app-table>
+    </div>
+</div>

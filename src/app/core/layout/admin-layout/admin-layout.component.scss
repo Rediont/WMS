@@ -1,0 +1,76 @@
+
+.admin-top-bar {
+    color: yellow;
+    padding: 10px;
+    background: rgb(35, 35, 35);
+    flex-grow: 1;
+}
+
+.admin-sidebar {
+    height: 100%;
+}
+
+nav {
+    background: linear-gradient(rgb(50, 50, 50), rgb(45, 45, 45));
+    color: yellow;
+    height: 100%;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 0px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    display: block;
+    transition: background 0.3s ease;
+    border-bottom: 2px solid rgb(70, 70, 70);
+}
+
+.admin-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    background-color: #f0f0f0;
+    background: linear-gradient(rgb(70,70,70),rgb(60,60,60)) ; 
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    height: 85%;
+    padding: 10px;
+    background-color: #f0f0f0;
+    background: linear-gradient(rgb(70,70,70),rgb(60,60,60)) ;
+    flex-grow: 7; 
+}
+
+.admin-content {
+    flex-grow: 10;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background: linear-gradient(rgb(50, 50, 50), rgb(45, 45, 45));
+
+}
+
+.a:hover {
+    background-color: yellow;
+    color: black;
+}
+
+.router {
+    flex-grow: 1;
+}
